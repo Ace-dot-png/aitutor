@@ -1,0 +1,735 @@
+{
+  "grades": {
+    "10": {
+      "mathematics": {
+        "label": "Mathematics",
+        "topics": [
+          {
+            "id": "m10_1",
+            "title": "Algebraic Expressions",
+            "subtopics": [
+              "Simplifying expressions",
+              "Products and factors",
+              "Factorisation",
+              "Algebraic fractions"
+            ]
+          },
+          {
+            "id": "m10_2",
+            "title": "Exponents and Surds",
+            "subtopics": [
+              "Laws of exponents",
+              "Rational exponents",
+              "Simplifying surds",
+              "Operations with surds"
+            ]
+          },
+          {
+            "id": "m10_3",
+            "title": "Equations and Inequalities",
+            "subtopics": [
+              "Linear equations",
+              "Quadratic equations",
+              "Simultaneous equations",
+              "Linear inequalities",
+              "Word problems"
+            ]
+          },
+          {
+            "id": "m10_4",
+            "title": "Trigonometry",
+            "subtopics": [
+              "Trigonometric ratios",
+              "SOHCAHTOA",
+              "Special angles",
+              "Solving right-angled triangles",
+              "Elevation and depression"
+            ]
+          },
+          {
+            "id": "m10_5",
+            "title": "Functions and Graphs",
+            "subtopics": [
+              "Linear functions",
+              "Quadratic functions",
+              "Hyperbolas",
+              "Exponential functions",
+              "Interpreting graphs"
+            ]
+          },
+          {
+            "id": "m10_6",
+            "title": "Euclidean Geometry",
+            "subtopics": [
+              "Angle relationships",
+              "Triangles",
+              "Quadrilaterals",
+              "Polygons",
+              "Similarity and congruence"
+            ]
+          },
+          {
+            "id": "m10_7",
+            "title": "Analytical Geometry",
+            "subtopics": [
+              "Distance formula",
+              "Midpoint formula",
+              "Gradient",
+              "Equation of a line",
+              "Collinearity"
+            ]
+          },
+          {
+            "id": "m10_8",
+            "title": "Statistics",
+            "subtopics": [
+              "Data collection",
+              "Measures of central tendency",
+              "Measures of dispersion",
+              "Five-number summary",
+              "Box and whisker plots"
+            ]
+          },
+          {
+            "id": "m10_9",
+            "title": "Probability",
+            "subtopics": [
+              "Basic probability",
+              "Venn diagrams",
+              "Complementary events",
+              "Union and intersection",
+              "Probability problems"
+            ]
+          }
+        ]
+      },
+      "physics": {
+        "label": "Physical Sciences",
+        "topics": [
+          {
+            "id": "p10_1",
+            "title": "Mechanics",
+            "subtopics": [
+              "Vectors and scalars",
+              "Motion in one dimension",
+              "Equations of motion",
+              "Instantaneous and average velocity",
+              "Acceleration"
+            ]
+          },
+          {
+            "id": "p10_2",
+            "title": "Energy",
+            "subtopics": [
+              "Gravitational potential energy",
+              "Kinetic energy",
+              "Mechanical energy",
+              "Conservation of energy",
+              "Work-energy theorem"
+            ]
+          },
+          {
+            "id": "p10_3",
+            "title": "Waves and Sound",
+            "subtopics": [
+              "Transverse waves",
+              "Longitudinal waves",
+              "Properties of sound",
+              "Doppler effect",
+              "Resonance"
+            ]
+          },
+          {
+            "id": "p10_4",
+            "title": "Electricity and Magnetism",
+            "subtopics": [
+              "Electric charge",
+              "Coulombs law",
+              "Electric fields",
+              "Ohms law",
+              "Series and parallel circuits"
+            ]
+          },
+          {
+            "id": "p10_5",
+            "title": "Matter and Materials",
+            "subtopics": [
+              "States of matter",
+              "Atomic structure",
+              "Periodic table",
+              "Chemical bonding",
+              "Intermolecular forces"
+            ]
+          },
+          {
+            "id": "p10_6",
+            "title": "Chemical Change",
+            "subtopics": [
+              "Physical and chemical change",
+              "Conservation of mass",
+              "Balancing equations",
+              "Stoichiometry",
+              "Types of reactions"
+            ]
+          }
+        ]
+      },
+      "english": {
+        "label": "English Home Language",
+        "topics": [
+          {
+            "id": "e10_1",
+            "title": "Reading and Comprehension",
+            "subtopics": [
+              "Literal comprehension",
+              "Inferential comprehension",
+              "Critical reading",
+              "Vocabulary in context",
+              "Summarising"
+            ]
+          },
+          {
+            "id": "e10_2",
+            "title": "Language Structures",
+            "subtopics": [
+              "Parts of speech",
+              "Tenses",
+              "Active and passive voice",
+              "Direct and indirect speech",
+              "Sentence structure"
+            ]
+          },
+          {
+            "id": "e10_3",
+            "title": "Writing",
+            "subtopics": [
+              "Essay writing",
+              "Transactional writing",
+              "Narrative writing",
+              "Planning and drafting",
+              "Editing and proofreading"
+            ]
+          },
+          {
+            "id": "e10_4",
+            "title": "Literature",
+            "subtopics": [
+              "Poetry analysis",
+              "Novel study",
+              "Drama",
+              "Short stories",
+              "Literary devices"
+            ]
+          },
+          {
+            "id": "e10_5",
+            "title": "Oral Communication",
+            "subtopics": [
+              "Prepared speech",
+              "Listening comprehension",
+              "Discussion skills",
+              "Pronunciation",
+              "Register and tone"
+            ]
+          }
+        ]
+      }
+    },
+    "11": {
+      "mathematics": {
+        "label": "Mathematics",
+        "topics": [
+          {
+            "id": "m11_1",
+            "title": "Exponents and Logarithms",
+            "subtopics": [
+              "Laws of logarithms",
+              "Natural logarithm",
+              "Solving exponential equations",
+              "Solving logarithmic equations",
+              "Applications"
+            ]
+          },
+          {
+            "id": "m11_2",
+            "title": "Number Patterns",
+            "subtopics": [
+              "Arithmetic sequences",
+              "Geometric sequences",
+              "Sigma notation",
+              "Arithmetic series",
+              "Geometric series"
+            ]
+          },
+          {
+            "id": "m11_3",
+            "title": "Functions",
+            "subtopics": [
+              "Inverse functions",
+              "Logarithmic functions",
+              "Transformations",
+              "Domain and range",
+              "Composite functions"
+            ]
+          },
+          {
+            "id": "m11_4",
+            "title": "Trigonometry",
+            "subtopics": [
+              "Reduction formulae",
+              "Co-functions",
+              "Identities",
+              "2D problems",
+              "Trig equations"
+            ]
+          },
+          {
+            "id": "m11_5",
+            "title": "Measurement",
+            "subtopics": [
+              "Surface area",
+              "Volume",
+              "Spheres cones pyramids",
+              "Scale factor",
+              "Compound shapes"
+            ]
+          },
+          {
+            "id": "m11_6",
+            "title": "Euclidean Geometry",
+            "subtopics": [
+              "Circle theorems",
+              "Cyclic quadrilaterals",
+              "Tangents",
+              "Proportionality theorem",
+              "Proofs"
+            ]
+          },
+          {
+            "id": "m11_7",
+            "title": "Statistics",
+            "subtopics": [
+              "Histograms",
+              "Frequency polygons",
+              "Ogives",
+              "Variance",
+              "Standard deviation"
+            ]
+          },
+          {
+            "id": "m11_8",
+            "title": "Probability",
+            "subtopics": [
+              "Counting principles",
+              "Factorial notation",
+              "Permutations",
+              "Combinations",
+              "Probability problems"
+            ]
+          }
+        ]
+      },
+      "physics": {
+        "label": "Physical Sciences",
+        "topics": [
+          {
+            "id": "p11_1",
+            "title": "Newtons Laws",
+            "subtopics": [
+              "Newtons first law",
+              "Newtons second law",
+              "Newtons third law",
+              "Friction",
+              "Tension and normal force"
+            ]
+          },
+          {
+            "id": "p11_2",
+            "title": "Momentum and Impulse",
+            "subtopics": [
+              "Linear momentum",
+              "Conservation of momentum",
+              "Impulse",
+              "Elastic collisions",
+              "Inelastic collisions"
+            ]
+          },
+          {
+            "id": "p11_3",
+            "title": "Electrostatics",
+            "subtopics": [
+              "Electric fields",
+              "Electric potential",
+              "Capacitance",
+              "Dielectrics",
+              "Applications"
+            ]
+          },
+          {
+            "id": "p11_4",
+            "title": "Electric Circuits",
+            "subtopics": [
+              "EMF and internal resistance",
+              "Power and energy",
+              "Series circuits",
+              "Parallel circuits",
+              "Mixed circuits"
+            ]
+          },
+          {
+            "id": "p11_5",
+            "title": "Optical Phenomena",
+            "subtopics": [
+              "Photoelectric effect",
+              "Emission spectra",
+              "Wave-particle duality",
+              "Energy of photons",
+              "Applications of light"
+            ]
+          },
+          {
+            "id": "p11_6",
+            "title": "Chemical Bonding",
+            "subtopics": [
+              "Ionic bonding",
+              "Covalent bonding",
+              "Metallic bonding",
+              "Lewis structures",
+              "Electronegativity"
+            ]
+          },
+          {
+            "id": "p11_7",
+            "title": "Stoichiometry",
+            "subtopics": [
+              "Mole concept",
+              "Molar mass",
+              "Mole ratios",
+              "Limiting reagents",
+              "Percentage yield"
+            ]
+          }
+        ]
+      },
+      "english": {
+        "label": "English Home Language",
+        "topics": [
+          {
+            "id": "e11_1",
+            "title": "Reading and Comprehension",
+            "subtopics": [
+              "Analytical reading",
+              "Contextual vocabulary",
+              "Figures of speech",
+              "Tone and mood",
+              "Bias and point of view"
+            ]
+          },
+          {
+            "id": "e11_2",
+            "title": "Language Structures",
+            "subtopics": [
+              "Complex sentences",
+              "Clauses",
+              "Conjunctions",
+              "Punctuation",
+              "Paragraph construction"
+            ]
+          },
+          {
+            "id": "e11_3",
+            "title": "Writing",
+            "subtopics": [
+              "Argumentative essays",
+              "Discursive essays",
+              "Formal letters",
+              "Reports",
+              "Reviews"
+            ]
+          },
+          {
+            "id": "e11_4",
+            "title": "Literature",
+            "subtopics": [
+              "In-depth poetry",
+              "Extended novel",
+              "Drama analysis",
+              "Comparative literature",
+              "Contextual questions"
+            ]
+          },
+          {
+            "id": "e11_5",
+            "title": "Media and Visual Literacy",
+            "subtopics": [
+              "Cartoons and adverts",
+              "Visual text analysis",
+              "Media bias",
+              "Multimodal texts",
+              "Critical analysis"
+            ]
+          }
+        ]
+      }
+    },
+    "12": {
+      "mathematics": {
+        "label": "Mathematics",
+        "topics": [
+          {
+            "id": "m12_1",
+            "title": "Sequences and Series",
+            "subtopics": [
+              "Arithmetic sequences",
+              "Geometric sequences",
+              "Sigma notation",
+              "Sum to infinity",
+              "Financial applications"
+            ]
+          },
+          {
+            "id": "m12_2",
+            "title": "Functions",
+            "subtopics": [
+              "Revision of functions",
+              "Inverses",
+              "Exponential and log",
+              "Interpreting graphs",
+              "Modelling"
+            ]
+          },
+          {
+            "id": "m12_3",
+            "title": "Finance Growth and Decay",
+            "subtopics": [
+              "Simple interest",
+              "Compound interest",
+              "Annuities",
+              "Future value",
+              "Present value"
+            ]
+          },
+          {
+            "id": "m12_4",
+            "title": "Trigonometry",
+            "subtopics": [
+              "Compound angles",
+              "Double angles",
+              "Solving trig equations",
+              "3D problems",
+              "Proofs"
+            ]
+          },
+          {
+            "id": "m12_5",
+            "title": "Polynomial Functions",
+            "subtopics": [
+              "Cubic functions",
+              "Sketching cubics",
+              "Factor theorem",
+              "Remainder theorem",
+              "Solving cubics"
+            ]
+          },
+          {
+            "id": "m12_6",
+            "title": "Differential Calculus",
+            "subtopics": [
+              "Limits",
+              "First principles",
+              "Rules of differentiation",
+              "Gradient of a curve",
+              "Optimisation"
+            ]
+          },
+          {
+            "id": "m12_7",
+            "title": "Analytical Geometry",
+            "subtopics": [
+              "Equation of a circle",
+              "Tangent to a circle",
+              "Intersection of lines and circles",
+              "Proofs",
+              "Coordinates"
+            ]
+          },
+          {
+            "id": "m12_8",
+            "title": "Euclidean Geometry",
+            "subtopics": [
+              "Similarity",
+              "Proportionality",
+              "Circle theorems revision",
+              "Proofs",
+              "Riders"
+            ]
+          },
+          {
+            "id": "m12_9",
+            "title": "Statistics",
+            "subtopics": [
+              "Regression",
+              "Correlation",
+              "Scatter plots",
+              "Bivariate data",
+              "Interpreting data"
+            ]
+          },
+          {
+            "id": "m12_10",
+            "title": "Probability",
+            "subtopics": [
+              "Counting principle",
+              "Permutations",
+              "Combinations",
+              "Probability rules",
+              "Complex problems"
+            ]
+          }
+        ]
+      },
+      "physics": {
+        "label": "Physical Sciences",
+        "topics": [
+          {
+            "id": "p12_1",
+            "title": "Momentum",
+            "subtopics": [
+              "Conservation of momentum",
+              "Impulse-momentum theorem",
+              "Collisions in 2D",
+              "Applications",
+              "Problem solving"
+            ]
+          },
+          {
+            "id": "p12_2",
+            "title": "Vertical Projectile Motion",
+            "subtopics": [
+              "Free fall",
+              "Equations of motion",
+              "Graphs of motion",
+              "Multi-stage problems",
+              "Air resistance"
+            ]
+          },
+          {
+            "id": "p12_3",
+            "title": "Electrodynamics",
+            "subtopics": [
+              "Magnetic fields",
+              "Electromagnetic induction",
+              "Faradays law",
+              "AC vs DC",
+              "Generators and motors"
+            ]
+          },
+          {
+            "id": "p12_4",
+            "title": "Optical Phenomena",
+            "subtopics": [
+              "Photoelectric effect",
+              "Atomic emission spectra",
+              "Absorption spectra",
+              "X-rays",
+              "Applications"
+            ]
+          },
+          {
+            "id": "p12_5",
+            "title": "Chemical Equilibrium",
+            "subtopics": [
+              "Dynamic equilibrium",
+              "Le Chateliers principle",
+              "Equilibrium constant",
+              "Kc and Kp",
+              "Industrial applications"
+            ]
+          },
+          {
+            "id": "p12_6",
+            "title": "Acids and Bases",
+            "subtopics": [
+              "Bronsted-Lowry theory",
+              "pH scale",
+              "Strong and weak acids",
+              "Neutralisation",
+              "Hydrolysis"
+            ]
+          },
+          {
+            "id": "p12_7",
+            "title": "Electrochemistry",
+            "subtopics": [
+              "Galvanic cells",
+              "Standard electrode potentials",
+              "EMF",
+              "Electrolytic cells",
+              "Applications"
+            ]
+          }
+        ]
+      },
+      "english": {
+        "label": "English Home Language",
+        "topics": [
+          {
+            "id": "e12_1",
+            "title": "Reading and Comprehension",
+            "subtopics": [
+              "Critical evaluation",
+              "Synthesis",
+              "Extended vocabulary",
+              "Unseen poetry",
+              "Complex texts"
+            ]
+          },
+          {
+            "id": "e12_2",
+            "title": "Language Structures",
+            "subtopics": [
+              "Advanced grammar",
+              "Style and register",
+              "Rhetorical devices",
+              "Sentence variety",
+              "Cohesion"
+            ]
+          },
+          {
+            "id": "e12_3",
+            "title": "Writing",
+            "subtopics": [
+              "Matric-level essays",
+              "Formal reports",
+              "Complex transactional texts",
+              "Editing under pressure",
+              "Timed writing"
+            ]
+          },
+          {
+            "id": "e12_4",
+            "title": "Literature",
+            "subtopics": [
+              "Prescribed poetry",
+              "Prescribed novel",
+              "Prescribed drama",
+              "Exam technique",
+              "Essay on literature"
+            ]
+          },
+          {
+            "id": "e12_5",
+            "title": "Revision and Exam Prep",
+            "subtopics": [
+              "Paper 1 strategy",
+              "Paper 2 strategy",
+              "Paper 3 strategy",
+              "Time management",
+              "Common mistakes"
+            ]
+          }
+        ]
+      }
+    }
+  }
+}

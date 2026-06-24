@@ -1,0 +1,56 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Playfair+Display:ital@1&family=Silkscreen:wght@400;700&family=Lato:wght@400;700&display=swap');
+
+@font-face {
+  font-family: 'Aharoni';
+  src: url('/fonts/aharoni.ttf') format('truetype');
+}
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    @apply bg-bg-primary text-text-primary font-inter;
+  }
+
+  * {
+    @apply border-border;
+  }
+
+  ::-webkit-scrollbar {
+    width: 6px;
+  }
+  ::-webkit-scrollbar-track {
+    @apply bg-bg-primary;
+  }
+  ::-webkit-scrollbar-thumb {
+    @apply bg-border rounded-full;
+  }
+}
+
+@layer components {
+  .card {
+    @apply bg-card border border-border rounded-card;
+  }
+  
+  .btn-primary {
+    @apply bg-accent-blue text-text-primary px-4 py-2 rounded-card font-medium hover:opacity-90 transition-opacity;
+  }
+  
+  .btn-secondary {
+    @apply border border-border text-text-primary px-4 py-2 rounded-card font-medium hover:bg-card transition-colors;
+  }
+
+  .input-field {
+    @apply bg-bg-secondary border border-border rounded-card px-4 py-2 text-text-primary placeholder-text-muted focus:outline-none focus:border-accent-blue transition-colors;
+  }
+
+  .mastery-pill {
+    @apply px-2 py-0.5 rounded-full text-xs font-semibold;
+  }
+
+  .sentiment-badge {
+    @apply px-2 py-0.5 rounded-full text-xs font-medium;
+  }
+}

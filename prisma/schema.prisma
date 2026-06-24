@@ -1,0 +1,193 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  ADMIN
+  TEACHER
+  STUDENT
+  PARENT
+}
+
+enum Subject {
+  MATHEMATICS
+  PHYSICS
+  ENGLISH
+}
+
+enum Grade {
+  G10
+  G11
+  G12
+}
+
+enum SentimentLabel {
+  POSITIVE
+  NEUTRAL
+  STRUGGLING
+  DISENGAGED
+}
+
+enum CurriculumType {
+  CAPS
+  IEB
+}
+
+model School {
+  id             String         @id @default(cuid())
+  name           String
+  curriculumType CurriculumType @default(CAPS)
+  createdAt      DateTime       @default(now())
+  users          User[]
+  classes        Class[]
+}
+
+model User {
+  id              String    @id @default(cuid())
+  email           String    @unique
+  password        String
+  name            String
+  role            Role
+  schoolId        String?
+  school          School?   @relation(fields: [schoolId], references: [id])
+  createdAt       DateTime  @default(now())
+  grade           Grade?
+  pin             String?   @unique
+  linkedStudentId String?
+  teacherClasses  ClassTeacher[]
+  studentClasses  ClassStudent[]
+  sessions        Session[]
+  notes           Note[]
+  timetable       TimetableEntry[]
+  stats           LearnerStats[]
+  lessonPlans     LessonPlan[]
+}
+
+model Class {
+  id        String         @id @default(cuid())
+  name      String
+  grade     Grade
+  schoolId  String
+  school    School         @relation(fields: [schoolId], references: [id])
+  createdAt DateTime       @default(now())
+  teachers  ClassTeacher[]
+  students  ClassStudent[]
+  subjects  ClassSubject[]
+}
+
+model ClassTeacher {
+  id        String  @id @default(cuid())
+  classId   String
+  teacherId String
+  subject   Subject
+  class     Class   @relation(fields: [classId], references: [id])
+  teacher   User    @relation(fields: [teacherId], references: [id])
+
+  @@unique([classId, teacherId, subject])
+}
+
+model ClassStudent {
+  id        String @id @default(cuid())
+  classId   String
+  studentId String
+  class     Class  @relation(fields: [classId], references: [id])
+  student   User   @relation(fields: [studentId], references: [id])
+
+  @@unique([classId, studentId])
+}
+
+model ClassSubject {
+  id      String  @id @default(cuid())
+  classId String
+  subject Subject
+  class   Class   @relation(fields: [classId], references: [id])
+
+  @@unique([classId, subject])
+}
+
+model Session {
+  id        String    @id @default(cuid())
+  studentId String
+  student   User      @relation(fields: [studentId], references: [id])
+  subject   Subject
+  topic     String
+  grade     Grade
+  startedAt DateTime  @default(now())
+  endedAt   DateTime?
+  messages  Message[]
+  analysis  SessionAnalysis?
+}
+
+model Message {
+  id        String   @id @default(cuid())
+  sessionId String
+  session   Session  @relation(fields: [sessionId], references: [id])
+  role      String
+  content   String   @db.Text
+  createdAt DateTime @default(now())
+}
+
+model SessionAnalysis {
+  id                  String         @id @default(cuid())
+  sessionId           String         @unique
+  session             Session        @relation(fields: [sessionId], references: [id])
+  sentimentLabel      SentimentLabel
+  sentimentScore      Int
+  knowledgeGainScore  Int
+  painPoints          String[]
+  breakthroughMoments String[]
+  teacherNote         String         @db.Text
+  parentNote          String         @db.Text
+  createdAt           DateTime       @default(now())
+}
+
+model LearnerStats {
+  id            String   @id @default(cuid())
+  studentId     String
+  student       User     @relation(fields: [studentId], references: [id])
+  subject       Subject
+  topicId       String
+  topicTitle    String
+  sessionsCount Int      @default(0)
+  masteryScore  Int      @default(0)
+  lastActive    DateTime @default(now())
+
+  @@unique([studentId, subject, topicId])
+}
+
+model Note {
+  id         String   @id @default(cuid())
+  studentId  String
+  student    User     @relation(fields: [studentId], references: [id])
+  title      String
+  fileUrl    String
+  subject    Subject
+  uploadedAt DateTime @default(now())
+}
+
+model TimetableEntry {
+  id        String   @id @default(cuid())
+  studentId String
+  student   User     @relation(fields: [studentId], references: [id])
+  day       String
+  startTime String
+  subject   Subject
+  topic     String
+  createdAt DateTime @default(now())
+}
+
+model LessonPlan {
+  id        String   @id @default(cuid())
+  teacherId String
+  teacher   User     @relation(fields: [teacherId], references: [id])
+  title     String
+  grade     Grade
+  subject   Subject
+  content   String   @db.Text
+  createdAt DateTime @default(now())
+}

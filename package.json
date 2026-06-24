@@ -1,0 +1,37 @@
+{
+  "name": "aitutor",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "prisma generate && prisma migrate deploy && next build",
+    "start": "next start",
+    "seed": "ts-node --compiler-options {\"module\":\"CommonJS\"} prisma/seed.ts",
+    "postinstall": "prisma generate"
+  },
+  "dependencies": {
+    "@prisma/client": "^5.22.0",
+    "@vercel/blob": "latest",
+    "bcryptjs": "latest",
+    "jspdf": "latest",
+    "next": "14",
+    "next-auth": "4",
+    "openai": "latest",
+    "prisma": "^5.22.0",
+    "react": "18",
+    "react-dom": "18",
+    "recharts": "latest",
+    "resend": "latest"
+  },
+  "devDependencies": {
+    "@types/bcryptjs": "latest",
+    "@types/node": "latest",
+    "@types/react": "latest",
+    "@types/react-dom": "latest",
+    "autoprefixer": "^10.5.1",
+    "postcss": "^8.5.15",
+    "tailwindcss": "^3.4.19",
+    "ts-node": "latest",
+    "typescript": "latest"
+  }
+}
