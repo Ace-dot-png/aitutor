@@ -5,25 +5,20 @@ import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { analysisPrompt } from "@/lib/prompts/analysisPrompt";
 
-const openai = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY,
-});
+function getOpenAI() {
+  return new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
+}
 
 export async function POST(req: NextRequest) {
   const session = await getServerSession(authOptions);
-  if (!session?.user) {
-    return new Response("Unauthorized", { status: 401 });
-  }
+  if (!session?.user) return new Response("Unauthorized", { status: 401 });
 
   const { sessionId, messages, grade, subject, topic, studentId } = await req.json();
 
-  const transcript = messages
-    .map((m: any) => `${m.role === "user" ? "Learner" : "Tutor"}: ${m.content}`)
-    .join("\n\n");
-
+  const transcript = messages.map((m: any) => `${m.role === "user" ? "Learner" : "Tutor"}: ${m.content}`).join("\n\n");
   const prompt = analysisPrompt(transcript, grade, subject, topic);
 
-  const completion = await openai.chat.completions.create({
+  const completion = await getOpenAI().chat.completions.create({
     model: "gpt-4o-mini",
     messages: [{ role: "user", content: prompt }],
     temperature: 0.2,
@@ -47,10 +42,7 @@ export async function POST(req: NextRequest) {
     },
   });
 
-  await prisma.session.update({
-    where: { id: sessionId },
-    data: { endedAt: new Date() },
-  });
+  await prisma.session.update({ where: { id: sessionId }, data: { endedAt: new Date() } });
 
   const existing = await prisma.learnerStats.findUnique({
     where: { studentId_subject_topicId: { studentId, subject, topicId: topic } },
@@ -64,13 +56,9 @@ export async function POST(req: NextRequest) {
 
   const lastAnalyses = await prisma.sessionAnalysis.findMany({
     where: { session: { studentId, subject, topic } },
-    orderBy: { createdAt: "desc" },
-    take: 5,
-    select: { knowledgeGainScore: true },
+    orderBy: { createdAt: "desc" }, take: 5, select: { knowledgeGainScore: true },
   });
-
   const avgScore = Math.round(lastAnalyses.reduce((sum, a) => sum + a.knowledgeGainScore, 0) / lastAnalyses.length);
-
   await prisma.learnerStats.update({
     where: { studentId_subject_topicId: { studentId, subject, topicId: topic } },
     data: { masteryScore: avgScore },

@@ -5,9 +5,9 @@ import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { tutorPrompt } from "@/lib/prompts/tutorPrompt";
 
-const openai = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY,
-});
+function getOpenAI() {
+  return new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
+}
 
 export async function POST(req: NextRequest) {
   const session = await getServerSession(authOptions);
@@ -18,7 +18,6 @@ export async function POST(req: NextRequest) {
   const { messages, grade, subject, topic, learnerName, sessionId } = await req.json();
 
   const systemPrompt = tutorPrompt(grade, subject, topic, learnerName);
-
   const curriculumContext = `[CURRICULUM CONTEXT: Grade ${grade}, Subject: ${subject}, Topic: ${topic}. Respond only within CAPS and IEB scope for this grade and subject.]`;
 
   const apiMessages: any[] = [{ role: "system", content: systemPrompt }];
@@ -32,12 +31,10 @@ export async function POST(req: NextRequest) {
 
   const lastUserMsg = messages.filter((m: any) => m.role === "user").pop();
   if (lastUserMsg && sessionId) {
-    await prisma.message.create({
-      data: { sessionId, role: "user", content: lastUserMsg.content },
-    });
+    await prisma.message.create({ data: { sessionId, role: "user", content: lastUserMsg.content } });
   }
 
-  const stream = await openai.chat.completions.create({
+  const stream = await getOpenAI().chat.completions.create({
     model: "gpt-4o-mini",
     messages: apiMessages,
     temperature: 0.4,
@@ -52,25 +49,14 @@ export async function POST(req: NextRequest) {
     async start(controller) {
       for await (const chunk of stream) {
         const text = chunk.choices[0]?.delta?.content || "";
-        if (text) {
-          fullResponse += text;
-          controller.enqueue(encoder.encode(text));
-        }
+        if (text) { fullResponse += text; controller.enqueue(encoder.encode(text)); }
       }
       controller.close();
-
       if (sessionId && fullResponse) {
-        await prisma.message.create({
-          data: { sessionId, role: "assistant", content: fullResponse },
-        });
+        await prisma.message.create({ data: { sessionId, role: "assistant", content: fullResponse } });
       }
     },
   });
 
-  return new Response(readable, {
-    headers: {
-      "Content-Type": "text/plain; charset=utf-8",
-      "Transfer-Encoding": "chunked",
-    },
-  });
+  return new Response(readable, { headers: { "Content-Type": "text/plain; charset=utf-8", "Transfer-Encoding": "chunked" } });
 }
