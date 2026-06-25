@@ -1,31 +1,36 @@
 "use client";
 import { createContext, useContext, useState, useEffect, ReactNode } from "react";
-import { Lang } from "./i18n";
 
-const LangContext = createContext<{ lang: Lang; setLang: (l: Lang) => void }>({
-  lang: "en", setLang: () => {},
+type Lang = "en" | "af";
+
+interface LanguageContextType {
+  lang: Lang;
+  setLang: (lang: Lang) => void;
+}
+
+const LanguageContext = createContext<LanguageContextType>({
+  lang: "en",
+  setLang: () => {},
 });
 
 export function LanguageProvider({ children }: { children: ReactNode }) {
-  const [lang, setLang] = useState<Lang>("en");
+  const [lang, setLangState] = useState<Lang>("en");
 
   useEffect(() => {
     const stored = localStorage.getItem("aitutor_lang") as Lang;
-    if (stored === "en" || stored === "af") setLang(stored);
+    if (stored === "en" || stored === "af") setLangState(stored);
   }, []);
 
-  const changeLang = (l: Lang) => {
-    setLang(l);
-    localStorage.setItem("aitutor_lang", l);
+  const setLang = (newLang: Lang) => {
+    setLangState(newLang);
+    localStorage.setItem("aitutor_lang", newLang);
   };
 
   return (
-    <LangContext.Provider value={{ lang, setLang: changeLang }}>
+    <LanguageContext.Provider value={{ lang, setLang }}>
       {children}
-    </LangContext.Provider>
+    </LanguageContext.Provider>
   );
 }
 
-export function useLanguage() {
-  return useContext(LangContext);
-}
+export const useLang = () => useContext(LanguageContext);

@@ -1,7 +1,7 @@
 export const strings = {
   en: {
     welcome: "Welcome back", dashboard: "Dashboard", tutor: "Tutor", notes: "My Notes",
-    timetable: "Timetable", progress: "Progress", settings: "Settings", logout: "Log out",
+    timetable: "Timetable", progress: "Progress", settings: "Settings", logout: "Log out", signOut: "Sign out", signIn: "Sign In", signingIn: "Signing in...", invalidEmail: "Invalid email or password", optional: "optional", password: "Password",
     selectSubject: "Select a subject", selectTopic: "Select a topic", startSession: "Start Session",
     endSession: "End Session", sendMessage: "Send", typeMessage: "Ask a question...",
     myClasses: "My Classes", students: "Students", struggling: "Struggling", mastery: "Mastery",
@@ -19,7 +19,7 @@ export const strings = {
     subjectPerformance: "Subject Performance", teacherPerformance: "Teacher Performance",
     sentimentOverview: "Sentiment Overview", painPointHeatmap: "Pain Point Heatmap",
     english: "English", afrikaans: "Afrikaans", language: "Language",
-    chooseLanguage: "Choose your language", comingSoon: "Coming soon", noData: "No data yet",
+    chooseLanguage: "Choose your language", comingSoon: "Coming soon", optional: "optional", signOut: "Sign out", signIn: "Sign In", signingIn: "Signing in...", invalidEmail: "Invalid email or password", noData: "No data yet",
     switchSubject: "Switch Subject", aiTutor: "AI Tutor",
     pickSubject: "Pick a subject and start learning", clickToStart: "Click to start chatting",
     gradeLabel: "Grade", askAnything: "Ask me anything", askFirst: "Ask your first question...",
@@ -28,7 +28,7 @@ export const strings = {
   },
   af: {
     welcome: "Welkom terug", dashboard: "Paneelbord", tutor: "Tutor", notes: "My Notas",
-    timetable: "Roostertabel", progress: "Vordering", settings: "Instellings", logout: "Teken uit",
+    timetable: "Roostertabel", progress: "Vordering", settings: "Instellings", logout: "Teken uit", signOut: "Teken uit", signIn: "Teken in", signingIn: "Besig om in te teken...", invalidEmail: "Ongeldige e-pos of wagwoord", optional: "opsioneel", password: "Wagwoord",
     selectSubject: "Kies 'n vak", selectTopic: "Kies 'n onderwerp", startSession: "Begin Sessie",
     endSession: "Beëindig Sessie", sendMessage: "Stuur", typeMessage: "Vra 'n vraag...",
     myClasses: "My Klasse", students: "Leerders", struggling: "Sukkelend", mastery: "Bemeestering",

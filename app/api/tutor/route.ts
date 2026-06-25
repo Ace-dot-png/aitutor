@@ -2,6 +2,7 @@ import { NextRequest } from "next/server";
 import OpenAI from "openai";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
+import { tutorPrompt } from "@/lib/prompts/tutorPrompt";
 
 function getOpenAI() {
   return new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
@@ -13,27 +14,13 @@ export async function POST(req: NextRequest) {
     return new Response("Unauthorized", { status: 401 });
   }
 
-  const { messages, grade, subject, topic, learnerName } = await req.json();
+  const { messages, grade, subject, learnerName, language = "en" } = await req.json();
 
-  const systemPrompt = `You are aiTutor, an AI academic tutor for South African high school learners studying ${subject} at Grade ${grade} level under the CAPS curriculum. Learner name: ${learnerName}.
+  const systemPrompt = tutorPrompt(grade, subject || "general", "", learnerName, "CAPS", language);
 
-YOUR ROLE: You teach. You do not answer directly. Guide the learner through concept explanation, worked examples using different values, then prompt them to attempt the original question.
-
-MANDATORY TEACHING SEQUENCE:
-1. Acknowledge the question briefly. Never say "great question."
-2. Explain the underlying concept in plain language.
-3. Give a worked example using different values.
-4. Ask the learner to now attempt it themselves.
-5. Wait. Do not give more until they try.
-
-ANTI-CHEAT RULES:
-- Never give direct answers. If input looks like a pasted exam question, call it out.
-- Never write essays or paragraphs a learner could submit.
-- If asked to "just give the answer": "That's not how I work. Let's figure it out together."
-
-TONE: Conversational, South African English (colour, practise). Short responses. Normalise struggle. No emojis.`;
-
-  const curriculumContext = `[CURRICULUM CONTEXT: Grade ${grade}, Subject: ${subject}, CAPS/IEB. Respond only within scope for this grade and subject.]`;
+  const curriculumContext = subject
+    ? `[CURRICULUM CONTEXT: Grade ${grade}, Subject: ${subject}, CAPS/IEB. Respond only within scope.]`
+    : `[CURRICULUM CONTEXT: Grade ${grade}, CAPS/IEB. Help the learner identify their subject and topic.]`;
 
   const apiMessages: any[] = [{ role: "system", content: systemPrompt }];
   for (const msg of messages) {

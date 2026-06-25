@@ -4,7 +4,7 @@ import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import Input from "@/components/ui/Input";
 import Button from "@/components/ui/Button";
-import { useLanguage } from "@/lib/LanguageContext";
+import { useLang } from "@/lib/LanguageContext";
 import { t } from "@/lib/i18n";
 
 const ROLE_REDIRECTS: Record<string, string> = {
@@ -14,7 +14,7 @@ const ROLE_REDIRECTS: Record<string, string> = {
 
 export default function LoginPage() {
   const router = useRouter();
-  const { lang, setLang } = useLanguage();
+  const { lang, setLang } = useLang();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
@@ -24,11 +24,10 @@ export default function LoginPage() {
     e.preventDefault();
     setLoading(true); setError("");
     const result = await signIn("credentials", { email, password, redirect: false });
-    if (result?.error) { setError("Invalid email or password"); setLoading(false); return; }
+    if (result?.error) { setError(t(lang, "invalidEmail")); setLoading(false); return; }
     const sessionRes = await fetch("/api/auth/session");
     const session = await sessionRes.json();
-    const redirect = ROLE_REDIRECTS[session?.user?.role] || "/login";
-    router.push(redirect);
+    router.push(ROLE_REDIRECTS[session?.user?.role] || "/login");
   };
 
   return (
@@ -43,10 +42,10 @@ export default function LoginPage() {
         <div className="card p-6">
           <form onSubmit={handleSubmit} className="space-y-4">
             <Input label="Email" type="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="admin@sandtonacademy.co.za" required />
-            <Input label="Password" type="password" value={password} onChange={(e) => setPassword(e.target.value)} placeholder="••••••••" required />
+            <Input label={t(lang, "password") || "Password"} type="password" value={password} onChange={(e) => setPassword(e.target.value)} placeholder="••••••••" required />
             {error && <div className="text-sm text-accent-orange bg-accent-orange/10 px-3 py-2 rounded-card">{error}</div>}
             <Button type="submit" className="w-full" disabled={loading}>
-              {loading ? "Signing in..." : "Sign In"}
+              {loading ? t(lang, "signingIn") : t(lang, "signIn")}
             </Button>
           </form>
         </div>
@@ -61,10 +60,6 @@ export default function LoginPage() {
               🇿🇦 Afrikaans
             </button>
           </div>
-        </div>
-
-        <div className="mt-4 text-center text-xs text-text-muted">
-          Demo: admin@sandtonacademy.co.za / Admin123!
         </div>
       </div>
     </div>
