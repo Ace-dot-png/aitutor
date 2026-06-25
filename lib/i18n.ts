@@ -19,7 +19,7 @@ export const strings = {
     subjectPerformance: "Subject Performance", teacherPerformance: "Teacher Performance",
     sentimentOverview: "Sentiment Overview", painPointHeatmap: "Pain Point Heatmap",
     english: "English", afrikaans: "Afrikaans", language: "Language",
-    chooseLanguage: "Choose your language", comingSoon: "Coming soon", optional: "optional", signOut: "Sign out", signIn: "Sign In", signingIn: "Signing in...", invalidEmail: "Invalid email or password", noData: "No data yet",
+    chooseLanguage: "Choose your language", comingSoon: "Coming soon", noData: "No data yet",
     switchSubject: "Switch Subject", aiTutor: "AI Tutor",
     pickSubject: "Pick a subject and start learning", clickToStart: "Click to start chatting",
     gradeLabel: "Grade", askAnything: "Ask me anything", askFirst: "Ask your first question...",
@@ -52,10 +52,10 @@ export const strings = {
     gradeLabel: "Graad", askAnything: "Vra my enigiets", askFirst: "Vra jou eerste vraag...",
     typeResponse: "Tik jou antwoord...", studyStreak: "Studie Streep", days: "dae",
     subjectProgress: "Vakvordering", forYou: "Vir Jou", recommended: "Aanbeveel",
-  }
-}
+  },
+};
 
-export type Lang = 'en' | 'af'
+export type Lang = "en" | "af";
 export const t = (lang: Lang, key: keyof typeof strings.en): string => {
-  return strings[lang]?.[key] ?? strings.en[key]
-}
+  return strings[lang]?.[key] ?? strings.en[key];
+};
