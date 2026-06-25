@@ -21,6 +21,12 @@ enum Subject {
 }
 
 enum Grade {
+  G4
+  G5
+  G6
+  G7
+  G8
+  G9
   G10
   G11
   G12
@@ -59,6 +65,7 @@ model User {
   grade           Grade?
   pin             String?   @unique
   linkedStudentId String?
+  language        String    @default("en")
   teacherClasses  ClassTeacher[]
   studentClasses  ClassStudent[]
   sessions        Session[]
@@ -87,7 +94,6 @@ model ClassTeacher {
   subject   Subject
   class     Class   @relation(fields: [classId], references: [id])
   teacher   User    @relation(fields: [teacherId], references: [id])
-
   @@unique([classId, teacherId, subject])
 }
 
@@ -97,7 +103,6 @@ model ClassStudent {
   studentId String
   class     Class  @relation(fields: [classId], references: [id])
   student   User   @relation(fields: [studentId], references: [id])
-
   @@unique([classId, studentId])
 }
 
@@ -106,7 +111,6 @@ model ClassSubject {
   classId String
   subject Subject
   class   Class   @relation(fields: [classId], references: [id])
-
   @@unique([classId, subject])
 }
 
@@ -156,7 +160,6 @@ model LearnerStats {
   sessionsCount Int      @default(0)
   masteryScore  Int      @default(0)
   lastActive    DateTime @default(now())
-
   @@unique([studentId, subject, topicId])
 }
 

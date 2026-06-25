@@ -4,16 +4,17 @@ import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import Input from "@/components/ui/Input";
 import Button from "@/components/ui/Button";
+import { useLanguage } from "@/lib/LanguageContext";
+import { t } from "@/lib/i18n";
 
 const ROLE_REDIRECTS: Record<string, string> = {
-  ADMIN: "/admin/dashboard",
-  TEACHER: "/teacher/dashboard",
-  STUDENT: "/student/dashboard",
-  PARENT: "/parent/dashboard",
+  ADMIN: "/admin/dashboard", TEACHER: "/teacher/dashboard",
+  STUDENT: "/student/dashboard", PARENT: "/parent/dashboard",
 };
 
 export default function LoginPage() {
   const router = useRouter();
+  const { lang, setLang } = useLanguage();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
@@ -21,21 +22,9 @@ export default function LoginPage() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setLoading(true);
-    setError("");
-
-    const result = await signIn("credentials", {
-      email,
-      password,
-      redirect: false,
-    });
-
-    if (result?.error) {
-      setError("Invalid email or password");
-      setLoading(false);
-      return;
-    }
-
+    setLoading(true); setError("");
+    const result = await signIn("credentials", { email, password, redirect: false });
+    if (result?.error) { setError("Invalid email or password"); setLoading(false); return; }
     const sessionRes = await fetch("/api/auth/session");
     const session = await sessionRes.json();
     const redirect = ROLE_REDIRECTS[session?.user?.role] || "/login";
@@ -53,31 +42,25 @@ export default function LoginPage() {
 
         <div className="card p-6">
           <form onSubmit={handleSubmit} className="space-y-4">
-            <Input
-              label="Email"
-              type="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              placeholder="admin@sandtonacademy.co.za"
-              required
-            />
-            <Input
-              label="Password"
-              type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              placeholder="••••••••"
-              required
-            />
-            {error && (
-              <div className="text-sm text-accent-orange bg-accent-orange/10 px-3 py-2 rounded-card">
-                {error}
-              </div>
-            )}
+            <Input label="Email" type="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="admin@sandtonacademy.co.za" required />
+            <Input label="Password" type="password" value={password} onChange={(e) => setPassword(e.target.value)} placeholder="••••••••" required />
+            {error && <div className="text-sm text-accent-orange bg-accent-orange/10 px-3 py-2 rounded-card">{error}</div>}
             <Button type="submit" className="w-full" disabled={loading}>
               {loading ? "Signing in..." : "Sign In"}
             </Button>
           </form>
+        </div>
+
+        <div className="mt-6 text-center">
+          <div className="text-xs text-text-muted mb-2">{t(lang, "chooseLanguage")}</div>
+          <div className="flex gap-2 justify-center">
+            <button onClick={() => setLang("en")} className={`px-3 py-1.5 rounded-card text-xs transition-colors ${lang === "en" ? "bg-accent-blue text-text-primary" : "bg-card text-text-secondary hover:text-text-primary"}`}>
+              🇿🇦 English
+            </button>
+            <button onClick={() => setLang("af")} className={`px-3 py-1.5 rounded-card text-xs transition-colors ${lang === "af" ? "bg-accent-blue text-text-primary" : "bg-card text-text-secondary hover:text-text-primary"}`}>
+              🇿🇦 Afrikaans
+            </button>
+          </div>
         </div>
 
         <div className="mt-4 text-center text-xs text-text-muted">
