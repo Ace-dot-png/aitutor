@@ -23,11 +23,17 @@ export default function LoginPage() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true); setError("");
-    const result = await signIn("credentials", { email, password, redirect: false });
-    if (result?.error) { setError(t(lang, "invalidEmail")); setLoading(false); return; }
-    const sessionRes = await fetch("/api/auth/session");
-    const session = await sessionRes.json();
-    router.push(ROLE_REDIRECTS[session?.user?.role] || "/login");
+    try {
+      const result = await signIn("credentials", { email, password, redirect: false });
+      if (!result || result.error) { setError(t(lang, "invalidEmail")); setLoading(false); return; }
+      const sessionRes = await fetch("/api/auth/session");
+      const session = await sessionRes.json();
+      const redirect = ROLE_REDIRECTS[session?.user?.role];
+      if (redirect) router.push(redirect);
+      else { setError(t(lang, "invalidEmail")); setLoading(false); }
+    } catch {
+      setError(t(lang, "invalidEmail")); setLoading(false);
+    }
   };
 
   return (
