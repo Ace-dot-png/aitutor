@@ -1,7 +1,7 @@
 export const strings = {
   en: {
     welcome: "Welcome back", dashboard: "Dashboard", tutor: "Tutor", notes: "My Notes",
-    timetable: "Timetable", progress: "Progress", settings: "Settings", logout: "Log out", signOut: "Sign out", signIn: "Sign In", signingIn: "Signing in...", invalidEmail: "Invalid email or password", optional: "optional", password: "Password",
+    timetable: "Timetable", progress: "Progress", settings: "Settings", logout: "Log out", signOut: "Sign out", signIn: "Sign In", signingIn: "Signing in...", invalidEmail: "Invalid email or password", optional: "optional", password: "Password", email: "Email",
     selectSubject: "Select a subject", selectTopic: "Select a topic", startSession: "Start Session",
     endSession: "End Session", sendMessage: "Send", typeMessage: "Ask a question...",
     myClasses: "My Classes", students: "Students", struggling: "Struggling", mastery: "Mastery",
@@ -28,7 +28,7 @@ export const strings = {
   },
   af: {
     welcome: "Welkom terug", dashboard: "Paneelbord", tutor: "Tutor", notes: "My Notas",
-    timetable: "Roostertabel", progress: "Vordering", settings: "Instellings", logout: "Teken uit", signOut: "Teken uit", signIn: "Teken in", signingIn: "Besig om in te teken...", invalidEmail: "Ongeldige e-pos of wagwoord", optional: "opsioneel", password: "Wagwoord",
+    timetable: "Roostertabel", progress: "Vordering", settings: "Instellings", logout: "Teken uit", signOut: "Teken uit", signIn: "Teken in", signingIn: "Besig om in te teken...", invalidEmail: "Ongeldige e-pos of wagwoord", optional: "opsioneel", password: "Wagwoord", email: "E-pos",
     selectSubject: "Kies 'n vak", selectTopic: "Kies 'n onderwerp", startSession: "Begin Sessie",
     endSession: "Beëindig Sessie", sendMessage: "Stuur", typeMessage: "Vra 'n vraag...",
     myClasses: "My Klasse", students: "Leerders", struggling: "Sukkelend", mastery: "Bemeestering",

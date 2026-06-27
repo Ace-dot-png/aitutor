@@ -10,59 +10,114 @@ function getOpenAI() {
 }
 
 export async function POST(req: NextRequest) {
-  const session = await getServerSession(authOptions);
-  if (!session?.user) return new Response("Unauthorized", { status: 401 });
+  try {
+    const authSession = await getServerSession(authOptions);
+    if (!authSession?.user?.id) return new Response("Unauthorized", { status: 401 });
 
-  const { sessionId, messages, grade, subject, topic, studentId } = await req.json();
+    const { sessionId, grade, subject, topic } = await req.json();
+    if (!sessionId) return Response.json({ error: "Missing sessionId" }, { status: 400 });
 
-  const transcript = messages.map((m: any) => `${m.role === "user" ? "Learner" : "Tutor"}: ${m.content}`).join("\n\n");
-  const prompt = analysisPrompt(transcript, grade, subject, topic);
+    const studentId = (authSession.user as any).id;
 
-  const completion = await getOpenAI().chat.completions.create({
-    model: "gpt-4o-mini",
-    messages: [{ role: "user", content: prompt }],
-    temperature: 0.2,
-    max_tokens: 500,
-  });
+    // Fetch real messages from DB
+    const sessionMessages = await prisma.message.findMany({
+      where: { sessionId },
+      orderBy: { createdAt: "asc" },
+    });
 
-  const raw = completion.choices[0]?.message?.content || "{}";
-  const jsonStr = raw.replace(/```json\n?|```/g, "").trim();
-  const analysis = JSON.parse(jsonStr);
+    const transcript = sessionMessages.length > 0
+      ? sessionMessages.map((m) => `${m.role === "user" ? "Learner" : "aiTutor"}: ${m.content}`).join("\n")
+      : "No messages recorded.";
 
-  await prisma.sessionAnalysis.create({
-    data: {
-      sessionId,
-      sentimentLabel: analysis.sentimentLabel?.toUpperCase() || "NEUTRAL",
-      sentimentScore: analysis.sentimentScore || 50,
-      knowledgeGainScore: analysis.knowledgeGainScore || 50,
-      painPoints: analysis.painPoints || [],
-      breakthroughMoments: analysis.breakthroughMoments || [],
-      teacherNote: analysis.teacherNote || "",
-      parentNote: analysis.parentNote || "",
-    },
-  });
+    const prompt = analysisPrompt(transcript, grade || "10", subject || "General", topic || "");
 
-  await prisma.session.update({ where: { id: sessionId }, data: { endedAt: new Date() } });
+    let analysisData;
+    try {
+      const completion = await getOpenAI().chat.completions.create({
+        model: "gpt-4o-mini",
+        messages: [{ role: "user", content: prompt }],
+        temperature: 0.2,
+        max_tokens: 500,
+      });
+      const raw = completion.choices[0]?.message?.content || "{}";
+      const clean = raw.replace(/```json\n?|```/g, "").trim();
+      analysisData = JSON.parse(clean);
+    } catch {
+      analysisData = {
+        sentimentLabel: "neutral",
+        sentimentScore: 50,
+        knowledgeGainScore: 50,
+        painPoints: [],
+        breakthroughMoments: [],
+        teacherNote: "Session completed. Analysis unavailable.",
+        parentNote: "Your child completed a study session.",
+      };
+    }
 
-  const existing = await prisma.learnerStats.findUnique({
-    where: { studentId_subject_topicId: { studentId, subject, topicId: topic } },
-  });
+    // Save analysis
+    await prisma.sessionAnalysis.create({
+      data: {
+        sessionId,
+        sentimentLabel: (analysisData.sentimentLabel?.toUpperCase() || "NEUTRAL") as any,
+        sentimentScore: analysisData.sentimentScore || 50,
+        knowledgeGainScore: analysisData.knowledgeGainScore || 50,
+        painPoints: analysisData.painPoints || [],
+        breakthroughMoments: analysisData.breakthroughMoments || [],
+        teacherNote: analysisData.teacherNote || "",
+        parentNote: analysisData.parentNote || "",
+      },
+    });
 
-  await prisma.learnerStats.upsert({
-    where: { studentId_subject_topicId: { studentId, subject, topicId: topic } },
-    create: { studentId, subject, topicId: topic, topicTitle: topic, sessionsCount: 1, masteryScore: analysis.knowledgeGainScore || 50 },
-    update: { sessionsCount: (existing?.sessionsCount || 0) + 1, masteryScore: analysis.knowledgeGainScore || 50, lastActive: new Date() },
-  });
+    const topicId = topic || "general";
 
-  const lastAnalyses = await prisma.sessionAnalysis.findMany({
-    where: { session: { studentId, subject, topic } },
-    orderBy: { createdAt: "desc" }, take: 5, select: { knowledgeGainScore: true },
-  });
-  const avgScore = Math.round(lastAnalyses.reduce((sum, a) => sum + a.knowledgeGainScore, 0) / lastAnalyses.length);
-  await prisma.learnerStats.update({
-    where: { studentId_subject_topicId: { studentId, subject, topicId: topic } },
-    data: { masteryScore: avgScore },
-  });
+    // Upsert learner stats
+    const existing = await prisma.learnerStats.findUnique({
+      where: { studentId_subject_topicId: { studentId, subject: subject as any, topicId } },
+    });
 
-  return Response.json(analysis);
+    await prisma.learnerStats.upsert({
+      where: { studentId_subject_topicId: { studentId, subject: subject as any, topicId } },
+      create: {
+        studentId,
+        subject: subject as any,
+        topicId,
+        topicTitle: topic || "General",
+        sessionsCount: 1,
+        masteryScore: analysisData.knowledgeGainScore || 50,
+      },
+      update: {
+        sessionsCount: (existing?.sessionsCount || 0) + 1,
+        masteryScore: analysisData.knowledgeGainScore || 50,
+        lastActive: new Date(),
+      },
+    });
+
+    // Rolling average - fix division by zero
+    const lastAnalyses = await prisma.sessionAnalysis.findMany({
+      where: { session: { studentId, subject: subject as any, topic: topic || "general" } },
+      orderBy: { createdAt: "desc" },
+      take: 5,
+      select: { knowledgeGainScore: true },
+    });
+
+    const masteryScore = lastAnalyses.length > 0
+      ? Math.round(lastAnalyses.reduce((sum, a) => sum + a.knowledgeGainScore, 0) / lastAnalyses.length)
+      : (analysisData.knowledgeGainScore || 50);
+
+    await prisma.learnerStats.update({
+      where: { studentId_subject_topicId: { studentId, subject: subject as any, topicId } },
+      data: { masteryScore },
+    });
+
+    // Close session
+    await prisma.session.update({
+      where: { id: sessionId },
+      data: { endedAt: new Date() },
+    });
+
+    return Response.json(analysisData);
+  } catch (error) {
+    console.error("Session analysis error:", error);
+    return Response.json({ error: "Something went wrong" }, { status: 500 });
+  }
 }

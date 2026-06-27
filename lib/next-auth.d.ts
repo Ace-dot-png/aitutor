@@ -1,25 +1,29 @@
-import { DefaultSession } from "next-auth";
+import NextAuth from "next-auth";
 
 declare module "next-auth" {
   interface Session {
     user: {
       id: string;
+      name: string;
+      email: string;
       role: string;
-      schoolId?: string | null;
-      schoolName?: string | null;
-      grade?: string | null;
-      pin?: string | null;
-      linkedStudentId?: string | null;
-    } & DefaultSession["user"];
+      grade?: string;
+      schoolId?: string;
+      schoolName?: string;
+      linkedStudentId?: string;
+      pin?: string;
+      language?: string;
+    };
   }
-
   interface User {
+    id: string;
     role: string;
-    schoolId?: string | null;
-    schoolName?: string | null;
-    grade?: string | null;
-    pin?: string | null;
-    linkedStudentId?: string | null;
+    grade?: string;
+    schoolId?: string;
+    schoolName?: string;
+    linkedStudentId?: string;
+    pin?: string;
+    language?: string;
   }
 }
 
@@ -27,10 +31,11 @@ declare module "next-auth/jwt" {
   interface JWT {
     id: string;
     role: string;
-    schoolId?: string | null;
-    schoolName?: string | null;
-    grade?: string | null;
-    pin?: string | null;
-    linkedStudentId?: string | null;
+    grade?: string;
+    schoolId?: string;
+    schoolName?: string;
+    linkedStudentId?: string;
+    pin?: string;
+    language?: string;
   }
 }

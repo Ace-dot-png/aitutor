@@ -47,7 +47,7 @@ export default function LoginPage() {
 
         <div className="card p-6">
           <form onSubmit={handleSubmit} className="space-y-4">
-            <Input label="Email" type="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="admin@sandtonacademy.co.za" required />
+            <Input label={t(lang, "email")} type="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="admin@sandtonacademy.co.za" required />
             <Input label={t(lang, "password") || "Password"} type="password" value={password} onChange={(e) => setPassword(e.target.value)} placeholder="••••••••" required />
             {error && <div className="text-sm text-accent-orange bg-accent-orange/10 px-3 py-2 rounded-card">{error}</div>}
             <Button type="submit" className="w-full" disabled={loading}>

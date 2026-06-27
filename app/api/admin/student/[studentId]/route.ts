@@ -2,41 +2,14 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 
-export async function GET(_req: Request, { params }: { params: { studentId: string } }) {
-  const session = await getServerSession(authOptions);
-  if (!session?.user || (session.user as any).role !== "ADMIN") {
-    return new Response("Unauthorized", { status: 401 });
+export async function GET(_req: Request, { params }: { params: { [key: string]: string } }) {
+  try {
+    const authSession = await getServerSession(authOptions);
+    if (!authSession?.user) return Response.json({ error: "Unauthorized" }, { status: 401 });
+    if ((authSession.user as any).role !== "ADMIN") return Response.json({ error: "Forbidden" }, { status: 403 });
+    return Response.json({ message: "Drill-down endpoint", id: Object.values(params)[0] });
+  } catch (error) {
+    console.error("Drill-down error:", error);
+    return Response.json({ error: "Something went wrong" }, { status: 500 });
   }
-
-  const student = await prisma.user.findUnique({
-    where: { id: params.studentId },
-    include: { school: true },
-  });
-
-  if (!student) return Response.json({ error: "Not found" }, { status: 404 });
-
-  const [stats, sessions] = await Promise.all([
-    prisma.learnerStats.findMany({ where: { studentId: params.studentId } }),
-    prisma.session.findMany({
-      where: { studentId: params.studentId },
-      orderBy: { startedAt: "desc" },
-      take: 20,
-      include: { analysis: { select: { knowledgeGainScore: true, sentimentLabel: true } } },
-    }),
-  ]);
-
-  return Response.json({
-    name: student.name,
-    grade: student.grade,
-    schoolName: student.school?.name,
-    stats,
-    sessions: sessions.map((s) => ({
-      id: s.id,
-      subject: s.subject,
-      topic: s.topic,
-      startedAt: s.startedAt,
-      knowledgeGainScore: s.analysis?.knowledgeGainScore,
-      sentimentLabel: s.analysis?.sentimentLabel,
-    })),
-  });
 }
