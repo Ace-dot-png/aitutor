@@ -79,6 +79,7 @@ model User {
   pin             String?   @unique
   linkedStudentId String?
   language        String    @default("en")
+  hobbies         String?   @default("")
   teacherClasses  ClassTeacher[]
   studentClasses  ClassStudent[]
   sessions        Session[]

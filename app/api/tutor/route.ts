@@ -19,7 +19,7 @@ export async function POST(req: NextRequest) {
     }
 
     const body = await req.json();
-    const { messages, grade, subject, learnerName, language = "en" } = body;
+    const { messages, grade, subject, learnerName, language = "en", hobbies = "" } = body;
     let { sessionId } = body;
 
     const studentId = (authSession.user as any).id;
@@ -27,22 +27,18 @@ export async function POST(req: NextRequest) {
     const gradeEnum = gradeEnumMap[grade] || "G10";
     const subjectEnum = subjectEnumMap[subjectKey] || "GENERAL";
 
-    // Create session on first message
     if (!sessionId) {
       const session = await prisma.session.create({
         data: {
-          studentId,
-          subject: subjectEnum as any,
+          studentId, subject: subjectEnum as any,
           topic: subjectKey === "general" ? "" : subjectKey,
-          grade: gradeEnum as any,
-          startedAt: new Date(),
+          grade: gradeEnum as any, startedAt: new Date(),
         },
       });
       sessionId = session.id;
     }
 
-    const systemPrompt = tutorPrompt(grade, subjectKey, "", learnerName, "CAPS", language);
-
+    const systemPrompt = tutorPrompt(grade, subjectKey, "", learnerName, "CAPS", language, hobbies);
     const contextTag = `[CONTEXT: Grade ${grade}, Subject: ${subjectKey === "general" ? "General" : subjectKey}, CAPS/IEB]`;
 
     const apiMessages: any[] = [{ role: "system", content: systemPrompt }];
@@ -50,21 +46,14 @@ export async function POST(req: NextRequest) {
       const msg = messages[i];
       if (msg.role === "user") {
         const isLatest = i === messages.length - 1;
-        apiMessages.push({
-          role: "user",
-          content: isLatest ? `${msg.content}\n\n${contextTag}` : msg.content,
-        });
+        apiMessages.push({ role: "user", content: isLatest ? `${msg.content}\n\n${contextTag}` : msg.content });
       } else if (msg.role === "assistant") {
         apiMessages.push({ role: "assistant", content: msg.content });
       }
     }
 
     const stream = await getOpenAI().chat.completions.create({
-      model: "gpt-4o-mini",
-      messages: apiMessages,
-      temperature: 0.4,
-      max_tokens: 600,
-      stream: true,
+      model: "gpt-4o-mini", messages: apiMessages, temperature: 0.4, max_tokens: 600, stream: true,
     });
 
     const encoder = new TextEncoder();
@@ -74,14 +63,9 @@ export async function POST(req: NextRequest) {
       async start(controller) {
         for await (const chunk of stream) {
           const text = chunk.choices[0]?.delta?.content || "";
-          if (text) {
-            fullResponse += text;
-            controller.enqueue(encoder.encode(text));
-          }
+          if (text) { fullResponse += text; controller.enqueue(encoder.encode(text)); }
         }
         controller.close();
-
-        // Save message pair to DB
         try {
           const lastUserMsg = messages.filter((m: any) => m.role === "user").pop();
           if (lastUserMsg) {
@@ -92,9 +76,7 @@ export async function POST(req: NextRequest) {
               ],
             });
           }
-        } catch (e) {
-          console.error("Failed to save messages:", e);
-        }
+        } catch (e) { console.error("Failed to save messages:", e); }
       },
     });
 
@@ -109,8 +91,7 @@ export async function POST(req: NextRequest) {
   } catch (error) {
     console.error("Tutor API error:", error);
     return new Response(JSON.stringify({ error: "Something went wrong" }), {
-      status: 500,
-      headers: { "Content-Type": "application/json" },
+      status: 500, headers: { "Content-Type": "application/json" },
     });
   }
 }
