@@ -1,4 +1,5 @@
-"use client";
+"use client"
+export const dynamic = 'force-dynamic'
 import Card from "@/components/ui/Card";
 import ProgressBar from "@/components/ui/ProgressBar";
 import { PieChart, Pie, Cell, ResponsiveContainer } from "recharts";

@@ -1,4 +1,5 @@
-"use client";
+"use client"
+export const dynamic = 'force-dynamic'
 import { useRouter } from "next/navigation";
 import Card from "@/components/ui/Card";
 import StatCard from "@/components/ui/StatCard";
