@@ -21,5 +21,5 @@ export default withAuth(
 );
 
 export const config = {
-  matcher: ["/admin/:path*","/teacher/:path*","/student/:path*","/parent/:path*","/api/tutor/:path*","/api/session-analysis/:path*","/api/lesson-plan/:path*","/api/stats/:path*","/api/notes/:path*","/api/timetable/:path*","/api/teacher/:path*","/api/admin/:path*","/api/parent/:path*"],
+  matcher: ["/admin/:path*","/teacher/:path*","/student/:path*","/parent/:path*","/api/tutor/:path*","/api/session-analysis/:path*","/api/lesson-plan/:path*","/api/stats/:path*","/api/notes/:path*","/api/timetable/:path*","/api/teacher/:path*","/api/admin/:path*","/api/parent/:path*","/api/reading/:path*","/api/tests/:path*","/api/user/:path*"],
 };

@@ -4,6 +4,8 @@ import { useSession } from "next-auth/react";
 import { useState, useRef, useEffect } from "react";
 import { useLang } from "@/lib/LanguageContext";
 import { t } from "@/lib/i18n";
+import { ColouredResponse } from "@/components/tutor/ColouredResponse";
+import { Mascot } from "@/components/mascot/Mascot";
 
 const SUBJECT_KEYS = ["mathematics","physics","english","afrikaans","accounting","business_studies","economics","geography","history","life_sciences","natural_sciences","social_sciences","economic_management","life_skills"];
 
@@ -22,9 +24,17 @@ export default function StudentTutorPage() {
   const [sessionId, setSessionId] = useState<string | null>(null);
   const [sessionEnded, setSessionEnded] = useState(false);
   const [analysisResult, setAnalysisResult] = useState<any>(null);
+  const [learningStyle, setLearningStyle] = useState("");
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => { fetch("/data/curriculum.json").then((r) => r.json()).then(setCurriculum); }, []);
+
+  useEffect(() => {
+    fetch("/api/user/learning-style")
+      .then((r) => r.json())
+      .then((d) => setLearningStyle(d.learningStyle || ""))
+      .catch(() => {});
+  }, []);
 
   useEffect(() => {
     if (!initialised) {
@@ -60,6 +70,7 @@ export default function StudentTutorPage() {
           subject: subject || "general",
           learnerName: user?.name || "Learner",
           language: lang, sessionId,
+          learningStyle,
         }),
       });
 
@@ -117,6 +128,17 @@ export default function StudentTutorPage() {
     if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); sendMessage(); }
   };
 
+  const mascotState = analysisResult
+    ? (analysisResult.knowledgeGainScore >= 70 ? "happy" as const : analysisResult.knowledgeGainScore >= 40 ? "neutral" as const : "sad" as const)
+    : "neutral" as const;
+  const mascotMsg = analysisResult
+    ? (analysisResult.knowledgeGainScore >= 70
+        ? (lang === "af" ? "Uitstekende sessie! Jy maak goeie vordering." : "Great session! You're making progress.")
+        : analysisResult.knowledgeGainScore >= 40
+        ? (lang === "af" ? "Goeie moeite. Gaan so voort!" : "Good effort. Keep going!")
+        : (lang === "af" ? "Moenie bekommerd wees nie, elke sessie help. Probeer weer binnekort." : "Don't worry, every session helps. Try again soon."))
+    : undefined;
+
   return (
     <div className="flex flex-col h-[calc(100vh-5rem)]">
       <div className="shrink-0 mb-3 flex items-center justify-between">
@@ -136,8 +158,14 @@ export default function StudentTutorPage() {
 
       {sessionEnded && analysisResult && (
         <div className="card p-3 mb-3 shrink-0 border-accent-green">
-          <div className="text-sm font-semibold text-accent-green">{t(lang, "sessionComplete")}</div>
-          <div className="text-text-secondary text-xs">{t(lang, "knowledgeGain")}: {analysisResult.knowledgeGainScore}/100</div>
+          <div className="flex items-center gap-4">
+            <Mascot state={mascotState} size={60} />
+            <div>
+              <div className="text-sm font-semibold text-accent-green">{t(lang, "sessionComplete")}</div>
+              <div className="text-text-secondary text-xs">{t(lang, "knowledgeGain")}: {analysisResult.knowledgeGainScore}/100</div>
+              <div className="text-text-muted text-xs mt-1">{mascotMsg}</div>
+            </div>
+          </div>
         </div>
       )}
 
@@ -145,7 +173,10 @@ export default function StudentTutorPage() {
         {messages.map((msg, i) => (
           <div key={i} className={`flex ${msg.role === "user" ? "justify-end" : "justify-start"}`}>
             <div className={`max-w-[70%] px-4 py-3 rounded-card ${msg.role === "user" ? "bg-accent-blue text-text-primary" : "bg-card text-text-primary"}`}>
-              <div className="text-sm whitespace-pre-wrap leading-relaxed">{msg.content}</div>
+              {msg.role === "assistant"
+                ? <ColouredResponse content={msg.content} />
+                : <div className="text-sm whitespace-pre-wrap leading-relaxed">{msg.content}</div>
+              }
             </div>
           </div>
         ))}

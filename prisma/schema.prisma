@@ -80,7 +80,10 @@ model User {
   linkedStudentId String?
   language        String    @default("en")
   hobbies         String?   @default("")
+  learningStyle   String?   @default("")
   teacherClasses  ClassTeacher[]
+  testResults     TestResult[]
+  readingSpeed    ReadingSpeedResult[]
   studentClasses  ClassStudent[]
   sessions        Session[]
   notes           Note[]
@@ -206,5 +209,26 @@ model LessonPlan {
   grade     Grade
   subject   Subject
   content   String   @db.Text
+  createdAt DateTime @default(now())
+}
+
+model TestResult {
+  id        String   @id @default(cuid())
+  studentId String
+  student   User     @relation(fields: [studentId], references: [id])
+  subject   Subject
+  topic     String
+  grade     Grade
+  score     Int
+  total     Int
+  createdAt DateTime @default(now())
+}
+
+model ReadingSpeedResult {
+  id        String   @id @default(cuid())
+  studentId String
+  student   User     @relation(fields: [studentId], references: [id])
+  wpm       Int
+  grade     Grade
   createdAt DateTime @default(now())
 }

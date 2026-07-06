@@ -7,6 +7,7 @@ export async function GET() {
   try {
     const authSession = await getServerSession(authOptions);
     if (!authSession?.user) return Response.json({ error: "Unauthorized" }, { status: 401 });
+    if ((authSession.user as any).role !== "STUDENT") return Response.json({ error: "Forbidden" }, { status: 403 });
     const user = await prisma.user.findUnique({
       where: { id: (authSession.user as any).id },
       select: { hobbies: true },
@@ -21,6 +22,7 @@ export async function PATCH(req: NextRequest) {
   try {
     const authSession = await getServerSession(authOptions);
     if (!authSession?.user) return Response.json({ error: "Unauthorized" }, { status: 401 });
+    if ((authSession.user as any).role !== "STUDENT") return Response.json({ error: "Forbidden" }, { status: 403 });
     const { hobbies } = await req.json();
     await prisma.user.update({
       where: { id: (authSession.user as any).id },

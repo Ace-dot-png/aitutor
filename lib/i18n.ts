@@ -25,6 +25,11 @@ export const strings = {
     gradeLabel: "Grade", askAnything: "Ask me anything", askFirst: "Ask your first question...",
     typeResponse: "Type your response...", studyStreak: "Study Streak", days: "days",
     subjectProgress: "Subject Progress", forYou: "For You", recommended: "Recommended",
+    reading: "Reading", discovery: "Discovery", tests: "Tests & Practice",
+    startReading: "Generate a Reading", readingSpeedTest: "Reading Speed Test",
+    learningStyle: "My Learning Style", takeTest: "Take the Test",
+    retakeTest: "Retake Test", startTest: "Start Test",
+    nextQuestion: "Next Question", viewResults: "View Results",
   },
   af: {
     welcome: "Welkom terug", dashboard: "Paneelbord", tutor: "Tutor", notes: "My Notas",
@@ -52,6 +57,11 @@ export const strings = {
     gradeLabel: "Graad", askAnything: "Vra my enigiets", askFirst: "Vra jou eerste vraag...",
     typeResponse: "Tik jou antwoord...", studyStreak: "Studie Streep", days: "dae",
     subjectProgress: "Vakvordering", forYou: "Vir Jou", recommended: "Aanbeveel",
+    reading: "Lees", discovery: "Ontdekking", tests: "Toetse en Oefening",
+    startReading: "Genereer 'n Leesstuk", readingSpeedTest: "Leesspoedstoets",
+    learningStyle: "My Leerstyl", takeTest: "Doen die Toets",
+    retakeTest: "Doen die Toets Weer", startTest: "Begin Toets",
+    nextQuestion: "Volgende Vraag", viewResults: "Sien Resultate",
   },
 };
 

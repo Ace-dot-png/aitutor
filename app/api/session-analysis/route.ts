@@ -12,7 +12,8 @@ function getOpenAI() {
 export async function POST(req: NextRequest) {
   try {
     const authSession = await getServerSession(authOptions);
-    if (!authSession?.user?.id) return new Response("Unauthorized", { status: 401 });
+    if (!authSession?.user?.id) return Response.json({ error: "Unauthorized" }, { status: 401 });
+    if ((authSession.user as any).role !== "STUDENT") return Response.json({ error: "Forbidden" }, { status: 403 });
 
     const { sessionId, grade, subject, topic } = await req.json();
     if (!sessionId) return Response.json({ error: "Missing sessionId" }, { status: 400 });
