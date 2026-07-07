@@ -172,7 +172,7 @@ export default function DiscoveryPage() {
         {testStep === -1 && learningStyle && styleLabel && (
           <div className="space-y-4">
             <div className="flex items-center gap-4">
-              <Mascot state="happy" size={60} />
+              <Mascot pose="happy" size={60} />
               <div>
                 <div className="text-sm font-semibold">
                   {styleLabel.emoji} {lang === "af" ? styleLabel.af : styleLabel.en}

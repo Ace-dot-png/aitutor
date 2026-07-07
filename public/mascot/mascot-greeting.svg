@@ -1,0 +1,71 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 240" width="200" height="240">
+  <defs>
+    <radialGradient id="bodyGrad" cx="50%" cy="40%" r="50%">
+      <stop offset="0%" stop-color="#8B7CF6"/>
+      <stop offset="100%" stop-color="#5A4BD1"/>
+    </radialGradient>
+    <radialGradient id="screenGrad" cx="50%" cy="40%" r="50%">
+      <stop offset="0%" stop-color="#FFFFFF"/>
+      <stop offset="100%" stop-color="#E8E4FF"/>
+    </radialGradient>
+    <radialGradient id="glow" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#FFE66D"/>
+      <stop offset="70%" stop-color="#FFD93D"/>
+      <stop offset="100%" stop-color="#FFC107"/>
+    </radialGradient>
+    <filter id="softShadow" x="-20%" y="-10%" width="140%" height="130%">
+      <feDropShadow dx="0" dy="2" stdDeviation="3" flood-color="#4A3BA8" flood-opacity="0.25"/>
+    </filter>
+    <filter id="screenGlow" x="-30%" y="-30%" width="160%" height="160%">
+      <feGaussianBlur stdDeviation="3" result="blur"/>
+      <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+  </defs>
+
+  <!-- Antenna -->
+  <line x1="100" y1="38" x2="72" y2="14" stroke="#5A4BD1" stroke-width="3" stroke-linecap="round"/>
+  <circle cx="72" cy="12" r="6" fill="url(#glow)" filter="url(#screenGlow)"/>
+
+  <!-- Body -->
+  <ellipse cx="100" cy="130" rx="55" ry="58" fill="url(#bodyGrad)" filter="url(#softShadow)"/>
+
+  <!-- Screen face -->
+  <rect x="65" y="95" width="70" height="52" rx="14" fill="url(#screenGrad)" stroke="#5A4BD1" stroke-width="2.5"/>
+
+  <!-- Eyes - warm, friendly, slightly squinted -->
+  <ellipse cx="90" cy="115" rx="8" ry="9" fill="#2D1B69"/>
+  <ellipse cx="110" cy="115" rx="8" ry="9" fill="#2D1B69"/>
+  <circle cx="88" cy="112" r="3" fill="white"/>
+  <circle cx="108" cy="112" r="3" fill="white"/>
+
+  <!-- Warm smile -->
+  <path d="M86 128 Q94 140 100 140 Q106 140 114 128" fill="#FF6B6B"/>
+
+  <!-- Blush -->
+  <ellipse cx="76" cy="121" rx="9" ry="5" fill="#FF8A8A" opacity="0.4"/>
+  <ellipse cx="124" cy="121" rx="9" ry="5" fill="#FF8A8A" opacity="0.4"/>
+
+  <!-- Left arm - waving hand -->
+  <path d="M47 135 Q28 120 24 100 Q22 90 26 82" stroke="#5A4BD1" stroke-width="7" fill="none" stroke-linecap="round"/>
+  <!-- Waving hand (open palm) -->
+  <circle cx="26" cy="78" r="6" fill="#5A4BD1"/>
+
+  <!-- Right arm - resting -->
+  <path d="M153 140 Q164 150 160 162 Q158 168 155 170" stroke="#5A4BD1" stroke-width="7" fill="none" stroke-linecap="round"/>
+
+  <!-- Legs -->
+  <ellipse cx="80" cy="190" rx="18" ry="12" fill="#5A4BD1"/>
+  <ellipse cx="120" cy="190" rx="18" ry="12" fill="#5A4BD1"/>
+
+  <!-- Motion lines for wave -->
+  <path d="M16 68 Q12 62 16 58" stroke="#C4B5FD" stroke-width="2" fill="none" stroke-linecap="round"/>
+  <path d="M20 62 Q16 56 20 52" stroke="#C4B5FD" stroke-width="2" fill="none" stroke-linecap="round"/>
+  <path d="M14 74 Q8 68 14 62" stroke="#C4B5FD" stroke-width="2" fill="none" stroke-linecap="round"/>
+
+  <!-- "Hi!" text bubble -->
+  <ellipse cx="46" cy="50" rx="22" ry="12" fill="white" stroke="#C4B5FD" stroke-width="1.5"/>
+  <text x="46" y="54" font-family="Arial, sans-serif" font-size="11" font-weight="bold" fill="#5A4BD1" text-anchor="middle">Hi!</text>
+
+  <!-- Sparkle -->
+  <text x="35" y="45" font-size="10" fill="#FFD93D">✦</text>
+</svg>

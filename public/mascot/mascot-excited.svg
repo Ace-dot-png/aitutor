@@ -1,0 +1,80 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 240" width="200" height="240">
+  <defs>
+    <radialGradient id="bodyGrad" cx="50%" cy="40%" r="50%">
+      <stop offset="0%" stop-color="#8B7CF6"/>
+      <stop offset="100%" stop-color="#5A4BD1"/>
+    </radialGradient>
+    <radialGradient id="screenGrad" cx="50%" cy="40%" r="50%">
+      <stop offset="0%" stop-color="#FFFFFF"/>
+      <stop offset="100%" stop-color="#E8E4FF"/>
+    </radialGradient>
+    <radialGradient id="glow" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#FFE66D"/>
+      <stop offset="70%" stop-color="#FFD93D"/>
+      <stop offset="100%" stop-color="#FFC107"/>
+    </radialGradient>
+    <filter id="softShadow" x="-20%" y="-10%" width="140%" height="130%">
+      <feDropShadow dx="0" dy="2" stdDeviation="3" flood-color="#4A3BA8" flood-opacity="0.25"/>
+    </filter>
+    <filter id="screenGlow" x="-30%" y="-30%" width="160%" height="160%">
+      <feGaussianBlur stdDeviation="3" result="blur"/>
+      <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+  </defs>
+
+  <!-- Motion lines (jumping up) -->
+  <line x1="70" y1="210" x2="70" y2="225" stroke="#C4B5FD" stroke-width="2.5" stroke-linecap="round"/>
+  <line x1="100" y1="215" x2="100" y2="232" stroke="#C4B5FD" stroke-width="2.5" stroke-linecap="round"/>
+  <line x1="130" y1="210" x2="130" y2="225" stroke="#C4B5FD" stroke-width="2.5" stroke-linecap="round"/>
+
+  <!-- Antenna -->
+  <line x1="100" y1="38" x2="72" y2="14" stroke="#5A4BD1" stroke-width="3" stroke-linecap="round"/>
+  <circle cx="72" cy="12" r="6" fill="url(#glow)" filter="url(#screenGlow)"/>
+
+  <!-- Body (shifted up slightly for jump) -->
+  <ellipse cx="100" cy="125" rx="55" ry="58" fill="url(#bodyGrad)" filter="url(#softShadow)"/>
+
+  <!-- Screen face -->
+  <rect x="65" y="90" width="70" height="52" rx="14" fill="url(#screenGrad)" stroke="#5A4BD1" stroke-width="2.5"/>
+
+  <!-- Eyes - star/sparkle eyes (excited!) -->
+  <!-- Left star eye -->
+  <polygon points="90,105 93,112 101,112 95,116 97,124 90,119 83,124 85,116 79,112 87,112" fill="#FF6B6B"/>
+  <!-- Right star eye -->
+  <polygon points="110,105 113,112 121,112 115,116 117,124 110,119 103,124 105,116 99,112 107,112" fill="#FF6B6B"/>
+  <!-- Tiny white sparkles in eyes -->
+  <circle cx="90" cy="112" r="1.5" fill="white"/>
+  <circle cx="110" cy="112" r="1.5" fill="white"/>
+
+  <!-- Big happy open mouth -->
+  <path d="M88 126 Q94 140 100 140 Q106 140 112 126" fill="#2D1B69" stroke="#2D1B69" stroke-width="1.5"/>
+  <!-- Tongue -->
+  <ellipse cx="100" cy="136" rx="5" ry="4" fill="#FF8A8A"/>
+
+  <!-- Blush -->
+  <ellipse cx="76" cy="117" rx="9" ry="5" fill="#FF8A8A" opacity="0.45"/>
+  <ellipse cx="124" cy="117" rx="9" ry="5" fill="#FF8A8A" opacity="0.45"/>
+
+  <!-- Arms - raised up celebrating! -->
+  <path d="M47 132 Q32 110 36 85 Q38 74 33 66" stroke="#5A4BD1" stroke-width="7" fill="none" stroke-linecap="round"/>
+  <path d="M153 132 Q168 110 164 85 Q162 74 167 66" stroke="#5A4BD1" stroke-width="7" fill="none" stroke-linecap="round"/>
+  <!-- Little hands/fists -->
+  <circle cx="33" cy="64" r="5" fill="#5A4BD1"/>
+  <circle cx="167" cy="64" r="5" fill="#5A4BD1"/>
+
+  <!-- Legs (spread in jump) -->
+  <ellipse cx="72" cy="184" rx="18" ry="12" fill="#5A4BD1" transform="rotate(-15, 72, 184)"/>
+  <ellipse cx="128" cy="184" rx="18" ry="12" fill="#5A4BD1" transform="rotate(15, 128, 184)"/>
+
+  <!-- Sparkles around -->
+  <text x="28" y="70" font-size="20" fill="#FFD93D">✦</text>
+  <text x="162" y="78" font-size="16" fill="#FFD93D">✦</text>
+  <text x="20" y="110" font-size="14" fill="#6BCB77">✦</text>
+  <text x="168" y="120" font-size="12" fill="#FF6B6B">✦</text>
+  <text x="145" y="50" font-size="10" fill="#FFD93D">✦</text>
+
+  <!-- Celebration lines above -->
+  <line x1="80" y1="32" x2="75" y2="20" stroke="#FFD93D" stroke-width="2.5" stroke-linecap="round"/>
+  <line x1="100" y1="28" x2="100" y2="15" stroke="#FFD93D" stroke-width="2.5" stroke-linecap="round"/>
+  <line x1="120" y1="32" x2="125" y2="20" stroke="#FFD93D" stroke-width="2.5" stroke-linecap="round"/>
+</svg>

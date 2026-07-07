@@ -1,62 +1,62 @@
 'use client'
 import { useEffect, useState } from 'react'
+import Image from 'next/image'
 
-type MascotState = 'happy' | 'neutral' | 'sad'
+type MascotPose = 'greeting' | 'curious' | 'thinking' | 'excited' | 'encouraging' | 'happy' | 'surprised' | 'gentle'
 
 interface MascotProps {
-  state: MascotState
+  pose?: MascotPose
+  state?: 'happy' | 'neutral' | 'sad'
   message?: string
   size?: number
 }
 
-const PlaceholderFace = ({ state }: { state: MascotState }) => {
-  const mouth = state === 'happy'
-    ? 'M 35 60 Q 50 75 65 60'
-    : state === 'sad'
-    ? 'M 35 70 Q 50 55 65 70'
-    : 'M 35 65 L 65 65'
-
-  const eyebrows = state === 'sad'
-    ? <><line x1="30" y1="32" x2="45" y2="38" stroke="#0A0A0A" strokeWidth="3" strokeLinecap="round"/><line x1="55" y1="38" x2="70" y2="32" stroke="#0A0A0A" strokeWidth="3" strokeLinecap="round"/></>
-    : state === 'happy'
-    ? <><line x1="30" y1="36" x2="45" y2="32" stroke="#0A0A0A" strokeWidth="3" strokeLinecap="round"/><line x1="55" y1="32" x2="70" y2="36" stroke="#0A0A0A" strokeWidth="3" strokeLinecap="round"/></>
-    : <><line x1="30" y1="35" x2="45" y2="35" stroke="#0A0A0A" strokeWidth="3" strokeLinecap="round"/><line x1="55" y1="35" x2="70" y2="35" stroke="#0A0A0A" strokeWidth="3" strokeLinecap="round"/></>
-
-  const colour = state === 'happy' ? '#1cdb19' : state === 'sad' ? '#d72d02' : '#121bde'
-
-  return (
-    <svg width="100" height="100" viewBox="0 0 100 100">
-      <circle cx="50" cy="50" r="45" fill={colour} />
-      {eyebrows}
-      <circle cx="38" cy="45" r="5" fill="#0A0A0A" />
-      <circle cx="62" cy="45" r="5" fill="#0A0A0A" />
-      <circle cx="40" cy="43" r="2" fill="white" />
-      <circle cx="64" cy="43" r="2" fill="white" />
-      <path d={mouth} stroke="#0A0A0A" strokeWidth="3" fill="none" strokeLinecap="round" />
-    </svg>
-  )
+const STATE_TO_POSE: Record<string, MascotPose> = {
+  happy: 'excited',
+  neutral: 'thinking',
+  sad: 'gentle',
 }
 
-export function Mascot({ state, message, size = 100 }: MascotProps) {
+const POSE_SRC: Record<MascotPose, string> = {
+  greeting: '/mascot/mascot-greeting.svg',
+  curious: '/mascot/mascot-curious.svg',
+  thinking: '/mascot/mascot-thinking.svg',
+  excited: '/mascot/mascot-excited.svg',
+  encouraging: '/mascot/mascot-encouraging.svg',
+  happy: '/mascot/mascot-happy.svg',
+  surprised: '/mascot/mascot-surprised.svg',
+  gentle: '/mascot/mascot-gentle.svg',
+}
+
+export function Mascot({ pose, state, message, size = 100 }: MascotProps) {
+  const resolvedPose: MascotPose = pose || (state ? STATE_TO_POSE[state] : 'greeting')
+  const src = POSE_SRC[resolvedPose]
   const [bounce, setBounce] = useState(false)
 
   useEffect(() => {
     setBounce(true)
     const t = setTimeout(() => setBounce(false), 600)
     return () => clearTimeout(t)
-  }, [state])
+  }, [resolvedPose])
 
   return (
     <div className="flex flex-col items-center gap-2">
       <div
         style={{
           width: size,
-          height: size,
+          height: size * 1.2,
           transform: bounce ? 'scale(1.15)' : 'scale(1)',
-          transition: 'transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1)'
+          transition: 'transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1)',
         }}
       >
-        <PlaceholderFace state={state} />
+        <Image
+          src={src}
+          alt={resolvedPose}
+          width={size}
+          height={size * 1.2}
+          className="w-full h-full"
+          priority
+        />
       </div>
       {message && (
         <div

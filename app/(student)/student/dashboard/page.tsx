@@ -27,7 +27,7 @@ export default function StudentDashboardPage() {
   return (
     <div className="space-y-6">
       <div className="flex items-center gap-4">
-        <Mascot state="happy" message={`${t(lang,"welcome")}, ${(user?.name || "").split(" ")[0]}!`} size={80} />
+        <Mascot pose="greeting" message={`${t(lang,"welcome")}, ${(user?.name || "").split(" ")[0]}!`} size={80} />
         <div>
           <h1 className="text-2xl font-semibold">{t(lang,"welcome")}, {user?.name || t(lang,"student")}</h1>
           <p className="text-text-muted text-sm mt-1">{t(lang,"grade")} {user?.grade?.replace("G","") || "10"}</p>

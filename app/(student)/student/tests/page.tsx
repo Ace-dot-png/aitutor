@@ -179,7 +179,7 @@ export default function TestsPage() {
           {answered && (
             <div className="space-y-3">
               <div className="flex items-center gap-3">
-                <Mascot state={lastCorrect ? "happy" : "sad"} size={50} />
+                <Mascot pose={lastCorrect ? "excited" : "gentle"} size={50} />
                 <p className={`text-sm ${lastCorrect ? "text-accent-green" : "text-accent-orange"}`}>
                   {lastCorrect
                     ? (lang === "af" ? "Korrek! Wel gedaan." : "Correct! Well done.")
@@ -200,7 +200,7 @@ export default function TestsPage() {
       {done && (
         <div className="card p-5 space-y-4 text-center">
           <Mascot
-            state={scorePercent >= 80 ? "happy" : scorePercent >= 50 ? "neutral" : "sad"}
+            pose={scorePercent >= 80 ? "excited" : scorePercent >= 50 ? "encouraging" : "gentle"}
             size={80}
             message={
               scorePercent >= 80

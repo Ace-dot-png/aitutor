@@ -1,0 +1,77 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 240" width="200" height="240">
+  <defs>
+    <radialGradient id="bodyGrad" cx="50%" cy="40%" r="50%">
+      <stop offset="0%" stop-color="#8B7CF6"/>
+      <stop offset="100%" stop-color="#5A4BD1"/>
+    </radialGradient>
+    <radialGradient id="screenGrad" cx="50%" cy="40%" r="50%">
+      <stop offset="0%" stop-color="#FFFFFF"/>
+      <stop offset="100%" stop-color="#E8E4FF"/>
+    </radialGradient>
+    <radialGradient id="glow" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#FFE66D"/>
+      <stop offset="70%" stop-color="#FFD93D"/>
+      <stop offset="100%" stop-color="#FFC107"/>
+    </radialGradient>
+    <radialGradient id="cheekBlush" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#FF8A8A" stop-opacity="0.6"/>
+      <stop offset="100%" stop-color="#FF8A8A" stop-opacity="0"/>
+    </radialGradient>
+    <filter id="softShadow" x="-20%" y="-10%" width="140%" height="130%">
+      <feDropShadow dx="0" dy="2" stdDeviation="3" flood-color="#4A3BA8" flood-opacity="0.25"/>
+    </filter>
+    <filter id="screenGlow" x="-30%" y="-30%" width="160%" height="160%">
+      <feGaussianBlur stdDeviation="3" result="blur"/>
+      <feMerge>
+        <feMergeNode in="blur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+
+  <!-- Antenna line -->
+  <line x1="100" y1="38" x2="72" y2="14" stroke="#5A4BD1" stroke-width="3" stroke-linecap="round"/>
+  <!-- Antenna glow ball -->
+  <circle cx="72" cy="12" r="6" fill="url(#glow)" filter="url(#screenGlow)"/>
+
+  <!-- Body -->
+  <ellipse cx="100" cy="130" rx="55" ry="58" fill="url(#bodyGrad)" filter="url(#softShadow)"/>
+
+  <!-- Screen face -->
+  <rect x="65" y="95" width="70" height="52" rx="14" fill="url(#screenGrad)" stroke="#5A4BD1" stroke-width="2.5"/>
+
+  <!-- Eyes - curious (looking up-left, raised eyebrows) -->
+  <ellipse cx="90" cy="113" rx="8" ry="9" fill="#2D1B69"/>
+  <ellipse cx="110" cy="113" rx="8" ry="9" fill="#2D1B69"/>
+  <!-- Eye highlights -->
+  <circle cx="88" cy="110" r="3" fill="white"/>
+  <circle cx="108" cy="110" r="3" fill="white"/>
+  <!-- Raised eyebrow lines -->
+  <path d="M79 104 Q90 98 101 104" stroke="#2D1B69" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+  <path d="M99 104 Q110 98 121 104" stroke="#2D1B69" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+
+  <!-- Mouth - small 'o' wondering -->
+  <ellipse cx="100" cy="133" rx="5" ry="4" fill="#FF6B6B"/>
+
+  <!-- Blush -->
+  <ellipse cx="76" cy="122" rx="9" ry="5" fill="#FF8A8A" opacity="0.35"/>
+  <ellipse cx="124" cy="122" rx="9" ry="5" fill="#FF8A8A" opacity="0.35"/>
+
+  <!-- Arms - one touching chin -->
+  <path d="M48 140 Q35 135 32 125 Q30 118 36 114" stroke="#5A4BD1" stroke-width="7" fill="none" stroke-linecap="round"/>
+  <path d="M152 140 Q165 135 162 148 Q160 156 155 158" stroke="#5A4BD1" stroke-width="7" fill="none" stroke-linecap="round"/>
+
+  <!-- Legs -->
+  <ellipse cx="80" cy="190" rx="18" ry="12" fill="#5A4BD1"/>
+  <ellipse cx="120" cy="190" rx="18" ry="12" fill="#5A4BD1"/>
+
+  <!-- Question mark floating -->
+  <text x="148" y="62" font-family="Arial, sans-serif" font-size="28" font-weight="bold" fill="#FFD93D" transform="rotate(10, 148, 62)">?</text>
+  <text x="155" y="53" font-family="Arial, sans-serif" font-size="16" font-weight="bold" fill="#FFD93D" transform="rotate(-5, 155, 53)">?</text>
+
+  <!-- Head tilt indicator - whole head tilted slightly right -->
+  <!-- Curious thinking bubbles -->
+  <circle cx="158" cy="45" r="4" fill="#FFD93D" opacity="0.6"/>
+  <circle cx="170" cy="50" r="3" fill="#FFD93D" opacity="0.4"/>
+  <circle cx="175" cy="58" r="2" fill="#FFD93D" opacity="0.3"/>
+</svg>

@@ -1,0 +1,60 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 240" width="200" height="240">
+  <defs>
+    <radialGradient id="bodyGrad" cx="50%" cy="40%" r="50%">
+      <stop offset="0%" stop-color="#8B7CF6"/>
+      <stop offset="100%" stop-color="#5A4BD1"/>
+    </radialGradient>
+    <radialGradient id="screenGrad" cx="50%" cy="40%" r="50%">
+      <stop offset="0%" stop-color="#FFFFFF"/>
+      <stop offset="100%" stop-color="#E8E4FF"/>
+    </radialGradient>
+    <radialGradient id="glow" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#FFE66D"/>
+      <stop offset="70%" stop-color="#FFD93D"/>
+      <stop offset="100%" stop-color="#FFC107"/>
+    </radialGradient>
+    <filter id="softShadow" x="-20%" y="-10%" width="140%" height="130%">
+      <feDropShadow dx="0" dy="2" stdDeviation="3" flood-color="#4A3BA8" flood-opacity="0.25"/>
+    </filter>
+    <filter id="screenGlow" x="-30%" y="-30%" width="160%" height="160%">
+      <feGaussianBlur stdDeviation="3" result="blur"/>
+      <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+  </defs>
+
+  <!-- Antenna -->
+  <line x1="100" y1="38" x2="72" y2="14" stroke="#5A4BD1" stroke-width="3" stroke-linecap="round"/>
+  <circle cx="72" cy="12" r="6" fill="url(#glow)" filter="url(#screenGlow)"/>
+
+  <!-- Body -->
+  <ellipse cx="100" cy="130" rx="55" ry="58" fill="url(#bodyGrad)" filter="url(#softShadow)"/>
+
+  <!-- Screen face -->
+  <rect x="65" y="95" width="70" height="52" rx="14" fill="url(#screenGrad)" stroke="#5A4BD1" stroke-width="2.5"/>
+
+  <!-- Eyes - happy squinting arcs -->
+  <path d="M82 112 Q90 106 98 112" stroke="#2D1B69" stroke-width="3" fill="none" stroke-linecap="round"/>
+  <path d="M102 112 Q110 106 118 112" stroke="#2D1B69" stroke-width="3" fill="none" stroke-linecap="round"/>
+
+  <!-- Happy wide smile -->
+  <path d="M88 130 Q94 142 100 142 Q106 142 112 130" fill="#FF6B6B" stroke="#FF6B6B" stroke-width="1.5"/>
+  <!-- Tongue peeking -->
+  <ellipse cx="100" cy="137" rx="4" ry="3.5" fill="#FF8A8A"/>
+
+  <!-- Blush - stronger for happy -->
+  <ellipse cx="76" cy="122" rx="10" ry="6" fill="#FF8A8A" opacity="0.4"/>
+  <ellipse cx="124" cy="122" rx="10" ry="6" fill="#FF8A8A" opacity="0.4"/>
+
+  <!-- Arms - relaxed, slight wave -->
+  <path d="M48 140 Q40 148 38 158 Q37 163 42 164" stroke="#5A4BD1" stroke-width="7" fill="none" stroke-linecap="round"/>
+  <path d="M152 135 Q165 125 170 118 Q172 114 168 112" stroke="#5A4BD1" stroke-width="7" fill="none" stroke-linecap="round"/>
+
+  <!-- Legs -->
+  <ellipse cx="80" cy="190" rx="18" ry="12" fill="#5A4BD1"/>
+  <ellipse cx="120" cy="190" rx="18" ry="12" fill="#5A4BD1"/>
+
+  <!-- Little hearts floating -->
+  <text x="155" y="50" font-size="18" fill="#FF6B6B">♥</text>
+  <text x="170" y="70" font-size="12" fill="#FF6B6B" opacity="0.6">♥</text>
+  <text x="25" y="55" font-size="14" fill="#FF6B6B" opacity="0.5">♥</text>
+</svg>

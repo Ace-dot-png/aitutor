@@ -128,9 +128,9 @@ export default function StudentTutorPage() {
     if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); sendMessage(); }
   };
 
-  const mascotState = analysisResult
-    ? (analysisResult.knowledgeGainScore >= 70 ? "happy" as const : analysisResult.knowledgeGainScore >= 40 ? "neutral" as const : "sad" as const)
-    : "neutral" as const;
+  const mascotPose = analysisResult
+    ? (analysisResult.knowledgeGainScore >= 70 ? "excited" as const : analysisResult.knowledgeGainScore >= 40 ? "encouraging" as const : "gentle" as const)
+    : "greeting" as const;
   const mascotMsg = analysisResult
     ? (analysisResult.knowledgeGainScore >= 70
         ? (lang === "af" ? "Uitstekende sessie! Jy maak goeie vordering." : "Great session! You're making progress.")
@@ -159,7 +159,7 @@ export default function StudentTutorPage() {
       {sessionEnded && analysisResult && (
         <div className="card p-3 mb-3 shrink-0 border-accent-green">
           <div className="flex items-center gap-4">
-            <Mascot state={mascotState} size={60} />
+            <Mascot pose={mascotPose} size={60} />
             <div>
               <div className="text-sm font-semibold text-accent-green">{t(lang, "sessionComplete")}</div>
               <div className="text-text-secondary text-xs">{t(lang, "knowledgeGain")}: {analysisResult.knowledgeGainScore}/100</div>

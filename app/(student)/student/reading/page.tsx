@@ -139,7 +139,7 @@ export default function ReadingPage() {
         )}
         {speedDone && speedResult && (
           <div className="flex items-center gap-4">
-            <Mascot state={speedResult.rating === "excellent" ? "happy" : speedResult.rating === "good" ? "neutral" : "sad"} size={60} />
+            <Mascot pose={speedResult.rating === "excellent" ? "excited" : speedResult.rating === "good" ? "encouraging" : "gentle"} size={60} />
             <div>
               <div className="text-lg font-semibold">{speedResult.wpm} WPM</div>
               <div className="text-sm text-text-secondary">
