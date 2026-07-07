@@ -171,17 +171,28 @@ export default function StudentTutorPage() {
 
       <div className="flex-1 overflow-y-auto space-y-4 pb-4">
         {messages.map((msg, i) => (
-          <div key={i} className={`flex ${msg.role === "user" ? "justify-end" : "justify-start"}`}>
-            <div className={`max-w-[70%] px-4 py-3 rounded-card ${msg.role === "user" ? "bg-accent-blue text-text-primary" : "bg-card text-text-primary"}`}>
+          <div key={i} className={`flex items-end gap-2 ${msg.role === "user" ? "justify-end" : "justify-start"}`}>
+            {msg.role === "assistant" && (
+              <div className="shrink-0">
+                <Mascot pose={i === 0 ? "greeting" : "curious"} size={36} />
+              </div>
+            )}
+            <div className={`max-w-[65%] px-4 py-3 rounded-card ${msg.role === "user" ? "bg-accent-blue text-text-primary" : "bg-card text-text-primary"}`}>
               {msg.role === "assistant"
                 ? <ColouredResponse content={msg.content} />
                 : <div className="text-sm whitespace-pre-wrap leading-relaxed">{msg.content}</div>
               }
             </div>
+            {msg.role === "user" && (
+              <div className="shrink-0 w-9" />
+            )}
           </div>
         ))}
         {loading && !sessionEnded && (
-          <div className="flex justify-start">
+          <div className="flex justify-start items-end gap-2">
+            <div className="shrink-0">
+              <Mascot pose="thinking" size={36} />
+            </div>
             <div className="bg-card px-5 py-3 rounded-card text-text-muted text-sm">
               <span className="inline-flex gap-1">
                 <span className="animate-pulse">●</span><span className="animate-pulse" style={{animationDelay:"0.2s"}}>●</span><span className="animate-pulse" style={{animationDelay:"0.4s"}}>●</span>
