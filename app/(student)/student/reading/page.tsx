@@ -40,6 +40,7 @@ export default function ReadingPage() {
   const { lang } = useLang();
 
   const [topic, setTopic] = useState("");
+  const [speedTopic, setSpeedTopic] = useState("");
   const [reading, setReading] = useState<ReadingData | null>(null);
   const [answers, setAnswers] = useState<string[]>(["", "", "", "", ""]);
   const [feedback, setFeedback] = useState<FeedbackData | null>(null);
