@@ -3,6 +3,7 @@ import OpenAI from "openai";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { sanitizeInput } from "@/lib/sanitize";
+import { afrikaansRules } from "@/lib/prompts/afrikaansRules";
 
 function getOpenAI() {
   return new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
@@ -21,12 +22,14 @@ export async function POST(req: NextRequest) {
     const safeGrade = sanitizeInput(grade);
     const isAfrikaans = language === "af";
 
+    const afRules = isAfrikaans ? afrikaansRules + "\n\n" : "";
+
     const wordRange = safeGrade <= "3" ? "50-80 words, very simple vocabulary, short sentences"
       : safeGrade <= "5" ? "80-150 words, simple vocabulary, clear sentences"
       : safeGrade <= "7" ? "150-250 words, moderate vocabulary, varied sentences"
       : "250-400 words, academic vocabulary, complex ideas";
 
-    const prompt = `You are an educational content creator for South African schools.
+    const prompt = `${afRules}You are an educational content creator for South African schools.
 Generate an age-appropriate reading passage for Grade ${safeGrade} learners
 about the topic: ${safeTopic}.
 

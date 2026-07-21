@@ -3,6 +3,7 @@ import OpenAI from "openai";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { sanitizeInput } from "@/lib/sanitize";
+import { afrikaansRules } from "@/lib/prompts/afrikaansRules";
 
 function getOpenAI() {
   return new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
@@ -18,6 +19,7 @@ export async function POST(req: NextRequest) {
     if (!passage || !questions || !answers) return Response.json({ error: "Missing fields" }, { status: 400 });
 
     const isAfrikaans = language === "af";
+    const afRules = isAfrikaans ? afrikaansRules + "\n\n" : "";
     const safeGrade = sanitizeInput(grade);
     const safePassage = sanitizeInput(passage);
 
@@ -25,7 +27,7 @@ export async function POST(req: NextRequest) {
       `Q${i + 1}: ${sanitizeInput(q)}\nA${i + 1}: ${sanitizeInput(answers[i] || "")}`
     ).join("\n");
 
-    const prompt = `You are a supportive reading comprehension teacher.
+    const prompt = `${afRules}You are a supportive reading comprehension teacher.
 A Grade ${safeGrade} learner has answered comprehension questions about a passage.
 
 Passage: ${safePassage}

@@ -1,3 +1,5 @@
+import { afrikaansRules } from "./afrikaansRules";
+
 export const tutorPrompt = (
   grade: string,
   subject: string,
@@ -98,6 +100,8 @@ ${!hobbies
 
 LANGUAGE INSTRUCTION:
 ${language === "af"
-  ? "Respond ONLY in formal Afrikaans. Use standard South African Afrikaans as taught in schools. Use correct academic terminology. Never use crude, vulgar, or inappropriate words. If a concept has a sensitive or anatomical name, use the formal educational term only. Do not mix English into your responses unless the technical term has no Afrikaans equivalent, in which case introduce it as: \"die term hiervoor is [term]\"."
+  ? afrikaansRules + `
+
+Respond ONLY in formal South African Afrikaans. Follow every rule above — especially double negation, STOMPI word order, and avoiding Dutch words. Use the 10-point checklist for every response.`
   : `Respond in clear, standard South African English appropriate for Grade ${grade} learners.`}
 `;

@@ -3,6 +3,7 @@ import OpenAI from "openai";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { sanitizeInput } from "@/lib/sanitize";
+import { afrikaansRules } from "@/lib/prompts/afrikaansRules";
 
 function getOpenAI() {
   return new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
@@ -21,8 +22,9 @@ export async function POST(req: NextRequest) {
     const safeTopic = sanitizeInput(topic);
     const safeGrade = sanitizeInput(grade);
     const isAfrikaans = language === "af";
+    const afRules = isAfrikaans ? afrikaansRules + "\n\n" : "";
 
-    const prompt = `Generate ${count} multiple choice questions for Grade ${safeGrade} ${safeSubject}
+    const prompt = `${afRules}Generate ${count} multiple choice questions for Grade ${safeGrade} ${safeSubject}
 on the topic: ${safeTopic}. Aligned to the CAPS/IEB curriculum.
 
 Each question must have exactly 4 options (A, B, C, D) with one correct answer.
