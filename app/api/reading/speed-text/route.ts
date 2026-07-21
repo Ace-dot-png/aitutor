@@ -14,15 +14,18 @@ export async function POST(req: NextRequest) {
     if (!authSession?.user) return Response.json({ error: "Unauthorized" }, { status: 401 });
     if ((authSession.user as any).role !== "STUDENT") return Response.json({ error: "Forbidden" }, { status: 403 });
 
-    const { grade, language = "en" } = await req.json();
+    const { grade, language = "en", topic } = await req.json();
     const gradeNumber = parseInt(grade) || 10;
     const targetGrade = Math.max(1, gradeNumber - 2);
+    const safeTopic = topic ? `The topic should be about: ${topic.trim()}.` : "Pick an interesting and engaging topic (nature, animals, sport, technology, adventure — avoid anything boring or too academic).";
     const isAfrikaans = language === "af";
     const afRules = isAfrikaans ? afrikaansRules + "\n\n" : "";
 
     const prompt = `${afRules}Generate a short reading passage for a learner who is at Grade ${targetGrade} 
 in terms of reading complexity. The actual learner is in Grade ${gradeNumber} but we are 
 testing at a lower level first.
+
+${safeTopic}
 
 Requirements:
 - 150 to 200 words exactly

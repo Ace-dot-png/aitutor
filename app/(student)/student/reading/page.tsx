@@ -118,7 +118,7 @@ export default function ReadingPage() {
       const res = await fetch("/api/reading/speed-text", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ grade, language: lang }),
+        body: JSON.stringify({ grade, language: lang, topic: speedTopic.trim() || undefined }),
       });
       const data = await res.json();
       const passage = data.passage || "";
@@ -229,9 +229,18 @@ export default function ReadingPage() {
 
         {/* Phase: IDLE — start button */}
         {speed.phase === 'idle' && (
-          <button onClick={startSpeedTest} disabled={loading} className="btn-primary text-sm">
-            {loading ? "..." : t(lang, "startTest") || "Start Speed Test"}
-          </button>
+          <div className="space-y-3">
+            <input
+              value={speedTopic}
+              onChange={(e) => setSpeedTopic(e.target.value)}
+              placeholder={lang === "af" ? "Onderwerp (bv. dinosourusse)" : "Topic (e.g. dinosaurs)"}
+              className="input-field w-full"
+              onKeyDown={(e) => e.key === "Enter" && startSpeedTest()}
+            />
+            <button onClick={startSpeedTest} disabled={loading} className="btn-primary text-sm">
+              {loading ? "..." : t(lang, "startTest") || "Start Speed Test"}
+            </button>
+          </div>
         )}
 
         {/* Phase: READY — show setup */}
