@@ -30,6 +30,25 @@ export default function StudentSettingsPage() {
       </Card>
 
       <Card className="p-6 max-w-md">
+        <h2 className="text-lg font-semibold mb-3">{lang==="af"?"Kurrikulum":"Curriculum"}</h2>
+        <div className="flex gap-2">
+          {["CAPS", "IEB", "CAMBRIDGE"].map((c) => (
+            <button
+              key={c}
+              className={`px-4 py-2 rounded-card text-sm ${(user as any)?.curriculum === c || (!user?.curriculum && c === "CAPS") ? "bg-accent-blue text-text-primary" : "bg-bg-secondary text-text-secondary"}`}
+            >
+              {c}
+            </button>
+          ))}
+        </div>
+        <p className="text-xs text-text-muted mt-2">
+          {lang === "af"
+            ? "Dit beïnvloed watter vakke en onderwerpe beskikbaar is."
+            : "This affects which subjects and topics are available."}
+        </p>
+      </Card>
+
+      <Card className="p-6 max-w-md">
         <h2 className="text-lg font-semibold mb-1">{lang==="af"?"Rekening":"Account"}</h2>
         <div className="text-sm text-text-secondary space-y-2 mt-3">
           <div><span className="text-text-muted">{lang==="af"?"Naam:":"Name:"}</span> {user?.name}</div>
