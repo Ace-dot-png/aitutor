@@ -20,6 +20,7 @@ export default function StudentLayout({ children }: { children: React.ReactNode 
     { label: t(lang, "reading") || "Reading", href: "/student/reading", icon: "📖" },
     { label: t(lang, "discovery") || "Discovery", href: "/student/discovery", icon: "🔍" },
     { label: t(lang, "tests") || "Tests", href: "/student/tests", icon: "📝" },
+    { label: t(lang, "maths") || "Maths", href: "/student/maths", icon: "🧮" },
     { label: t(lang, "progress"), href: "/student/progress", icon: "▤" },
     { label: t(lang, "notes"), href: "/student/notes", icon: "☰" },
     { label: t(lang, "timetable"), href: "/student/timetable", icon: "▥" },
