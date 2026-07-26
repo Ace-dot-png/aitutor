@@ -24,22 +24,27 @@ export async function POST(req: NextRequest) {
 
     const afRules = isAfrikaans ? afrikaansRules + "\n\n" : "";
 
-    const wordRange = safeGrade <= "3" ? "50-80 words, very simple vocabulary, short sentences"
-      : safeGrade <= "5" ? "80-150 words, simple vocabulary, clear sentences"
-      : safeGrade <= "7" ? "150-250 words, moderate vocabulary, varied sentences"
-      : "250-400 words, academic vocabulary, complex ideas";
+    const gradeNum = parseInt(safeGrade) || 10;
+    const wordRange = gradeNum <= 3 ? "60-80 words"
+      : gradeNum <= 5 ? "80-120 words"
+      : gradeNum <= 7 ? "120-180 words"
+      : gradeNum <= 9 ? "180-250 words"
+      : "250-400 words";
+
+    const questionCount = gradeNum <= 3 ? 3
+      : gradeNum <= 5 ? 4
+      : 5;
 
     const prompt = `${afRules}You are an educational content creator for South African schools.
 Generate an age-appropriate reading passage for Grade ${safeGrade} learners
 about the topic: ${safeTopic}.
 
 Requirements:
-- Grade 1-3: ${wordRange}
-- Grade 4-5: ${wordRange}
-- Grade 6-7: ${wordRange}
-- Grade 8-12: ${wordRange}
+- ${wordRange}
+- Vocabulary and sentence complexity appropriate for Grade ${safeGrade}
+- South African context where natural
 
-After the passage, generate exactly 5 comprehension questions appropriate
+After the passage, generate exactly ${questionCount} comprehension questions appropriate
 for the grade level. Mix literal, inferential, and vocabulary questions.
 
 Respond in ${isAfrikaans ? "formal Afrikaans" : "South African English"}.

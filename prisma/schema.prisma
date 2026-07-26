@@ -55,6 +55,7 @@ enum SentimentLabel {
 enum CurriculumType {
   CAPS
   IEB
+  CAMBRIDGE
 }
 
 model School {
