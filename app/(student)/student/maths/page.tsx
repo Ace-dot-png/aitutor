@@ -11,7 +11,9 @@ const TOPICS = [
   { key: 'bonds', label: 'Number Bonds', labelAf: 'Getalbinding', icon: '🔗', desc: 'Bonds to 10, 20, 100', descAf: 'Binding tot 10, 20, 100' },
   { key: 'timestables', label: 'Times Tables', labelAf: 'Maaltafels', icon: '✖️', desc: 'Multiplication tables', descAf: 'Vermenigvuldigingstafels' },
   { key: 'division', label: 'Long Division', labelAf: 'Langdeling', icon: '➗', desc: 'Division with steps', descAf: 'Deling met stappe' },
+  { key: 'fractions', label: 'Fractions', labelAf: 'Breuke', icon: '½', desc: 'Add, subtract, multiply, divide fractions', descAf: 'Optel, aftrek, vermenigvuldig, deel van breuke' },
   { key: 'exponents', label: 'Exponents', labelAf: 'Eksponente', icon: 'ⁿ', desc: 'Squares, cubes, powers', descAf: 'Kwadrate, derdemagte, magte' },
+  { key: 'rules', label: 'BODMAS / Order of Operations', labelAf: 'BODMAS / Bewerkingsvolgorde', icon: '📐', desc: 'Brackets, Orders, Division, Multiplication, Addition, Subtraction', descAf: 'Hakies, Ordes, Deel, Vermenigvuldig, Optel, Aftrek' },
 ];
 
 interface MathsQuestion {

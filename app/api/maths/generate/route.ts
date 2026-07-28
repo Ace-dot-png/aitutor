@@ -110,6 +110,51 @@ Return ONLY this JSON, no other text:
   ]
 }`,
       },
+      fractions: {
+        name: "fractions",
+        prompt: `Generate ${count} fraction questions.
+Grade ${gradeNum} level:
+- Grade 1-3: simple fractions of shapes, halves and quarters
+- Grade 4-5: equivalent fractions, adding/subtracting with same denominator
+- Grade 6-7: add/subtract unlike denominators, multiply fractions, mixed numbers
+- Grade 8+: complex fractions, algebraic fractions, fraction operations combined
+
+Include the correct answer. Keep fractions clean with whole-number results where possible.
+
+Return ONLY this JSON, no other text:
+{
+  "questions": [
+    {
+      "question": "1/2 + 1/4 = ?",
+      "answer": "3/4",
+      "hint": "Convert 1/2 to 2/4 first, then add."
+    }
+  ]
+}`,
+      },
+      rules: {
+        name: "order of operations (BODMAS)",
+        prompt: `Generate ${count} BODMAS / order of operations questions.
+Grade ${gradeNum} level:
+- Grade 4-5: simple two-step (e.g., 3 + 4 × 2)
+- Grade 6-7: three-step with brackets (e.g., (8 - 3) × 4 + 2)
+- Grade 8-9: multi-step with all operations including exponents
+- Grade 10+: complex nested brackets and negative numbers
+
+Use BODMAS: Brackets, Orders (powers/roots), Division, Multiplication, Addition, Subtraction.
+Each question should test the correct order of operations.
+
+Return ONLY this JSON, no other text:
+{
+  "questions": [
+    {
+      "question": "3 + 4 × 2 = ?",
+      "answer": "11",
+      "hint": "Multiplication before addition: 4 × 2 = 8, then 3 + 8 = 11."
+    }
+  ]
+}`,
+      },
     };
 
     const config = topicConfigs[type];
