@@ -160,20 +160,23 @@ export default function AdminUsersPage() {
           {classes.map(c => {
             const studentsInClass = DEMO_USERS.students.filter(s => s.class === c);
             return (
-              <Card key={c} className="p-5">
-                <div className="text-lg font-semibold">{c}</div>
+              <div key={c} className="card p-5" style={{ background: "#1A1A1A", border: "1px solid #2A2A2A", borderRadius: "12px" }}>
+                <div className="text-lg font-semibold" style={{ color: "#F5F5F5" }}>{c}</div>
                 <div className="text-sm text-text-muted mt-1">
                   {studentsInClass.length} {lang === "af" ? "leerders" : "students"}
                 </div>
-                <div className="mt-3 space-y-1">
+                <div className="mt-3" style={{ display: "flex", flexDirection: "column", gap: "4px" }}>
                   {studentsInClass.map(s => (
                     <div key={s.id} className="flex items-center justify-between text-sm">
-                      <span className="text-text-primary">{s.name}</span>
+                      <span style={{ color: "#F5F5F5" }}>{s.name}</span>
                       <span className="text-xs text-text-muted">{t(lang, "grade")} {s.grade.replace("G", "")} · {s.curriculum}</span>
                     </div>
                   ))}
+                  {studentsInClass.length === 0 && (
+                    <span className="text-xs text-text-muted">{lang === "af" ? "Geen leerders" : "No students"}</span>
+                  )}
                 </div>
-              </Card>
+              </div>
             );
           })}
         </div>
