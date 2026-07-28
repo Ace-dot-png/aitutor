@@ -13,7 +13,10 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
   if (status === "loading") return <div className="min-h-screen bg-bg-primary flex items-center justify-center"><div className="text-text-muted">Loading...</div></div>;
 
   const user = session?.user as any;
-  const items = [{ label: t(lang, "dashboard"), href: "/admin/dashboard", icon: "▦" }];
+  const items = [
+    { label: t(lang, "dashboard"), href: "/admin/dashboard", icon: "▦" },
+    { label: lang === "af" ? "Gebruikers" : "Users", href: "/admin/users", icon: "👥" },
+  ];
 
   return (
     <div className="min-h-screen bg-bg-primary">
