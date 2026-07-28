@@ -1,25 +1,19 @@
 "use client"
-export const dynamic = 'force-dynamic'
+
 import { useState } from "react";
-import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
-import Input from "@/components/ui/Input";
-import Button from "@/components/ui/Button";
-import { useLang } from "@/lib/LanguageContext";
-import { t } from "@/lib/i18n";
 
 export default function ParentLinkPage() {
-  const { data: session } = useSession();
   const router = useRouter();
-  const { lang } = useLang();
   const [pin, setPin] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
-  if ((session?.user as any)?.linkedStudentId) { router.push("/parent/dashboard"); return null; }
-
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault(); setLoading(true); setError("");
+    e.preventDefault();
+    setLoading(true);
+    setError("");
+
     const res = await fetch("/api/parent/link", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -28,56 +22,111 @@ export default function ParentLinkPage() {
     const data = await res.json();
 
     if (res.ok && data.success) {
-      // Store in localStorage so dashboard can read it
-      if (data.studentId) {
-        localStorage.setItem("linkedStudentId", data.studentId);
-        localStorage.setItem("linkedStudentName", data.studentName);
-      }
+      localStorage.setItem("linkedStudentId", data.studentId);
+      localStorage.setItem("linkedStudentName", data.studentName);
       router.push("/parent/dashboard");
-      router.refresh();
     } else {
-      setError(data.error || (lang === "af" ? "Ongeldige PIN" : "Invalid PIN"));
+      setError(data.error || "Invalid PIN");
       setLoading(false);
     }
   };
 
   return (
-    <div className="min-h-screen bg-bg-primary flex items-center justify-center p-4">
-      <div className="w-full max-w-sm">
-        <div className="text-center mb-8">
-          <div className="font-silkscreen text-4xl text-text-primary mb-2">;)</div>
-          <div className="font-aharoni text-2xl text-text-primary tracking-wider">aiTutor</div>
-          <div className="text-text-secondary text-sm mt-2">{lang === "af" ? "Ouer Portaal" : "Parent Portal"}</div>
+    <div style={{
+      minHeight: "100vh",
+      background: "#0A0A0A",
+      display: "flex",
+      alignItems: "center",
+      justifyContent: "center",
+      padding: "16px",
+    }}>
+      <div style={{ width: "100%", maxWidth: "380px" }}>
+        <div style={{ textAlign: "center", marginBottom: "32px" }}>
+          <div style={{ fontSize: "48px", color: "#F5F5F5", marginBottom: "8px" }}>;)</div>
+          <div style={{ fontSize: "28px", color: "#F5F5F5", fontWeight: 700, letterSpacing: "2px" }}>aiTutor</div>
+          <div style={{ fontSize: "14px", color: "#B0B0B0", marginTop: "8px" }}>Parent Portal</div>
         </div>
-        <div className="card p-6">
-          <h2 className="text-lg font-semibold mb-1">{lang === "af" ? "Koppel aan Jou Kind" : "Link to Your Child"}</h2>
-          <p className="text-text-muted text-sm mb-4">
-            {lang === "af"
-              ? "Voer die 6-syfer PIN in wat jou kind vir jou gegee het."
-              : "Enter the 6-digit PIN your child gave you to view their progress."}
+
+        <div style={{
+          background: "#1A1A1A",
+          border: "1px solid #2A2A2A",
+          borderRadius: "12px",
+          padding: "24px",
+        }}>
+          <h2 style={{ fontSize: "18px", fontWeight: 600, color: "#F5F5F5", marginBottom: "4px" }}>
+            Link to Your Child
+          </h2>
+          <p style={{ fontSize: "13px", color: "#6B6B6B", marginBottom: "16px" }}>
+            Enter the 6-digit PIN your child gave you to view their progress.
           </p>
-          <form onSubmit={handleSubmit} className="space-y-4">
-            <Input
-              label={lang === "af" ? "Leerder PIN" : "Student PIN"}
-              type="text"
-              value={pin}
-              onChange={(e) => setPin(e.target.value)}
-              placeholder="482910"
-              maxLength={6}
-              required
-            />
+
+          <form onSubmit={handleSubmit} style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
+            <div>
+              <label style={{ display: "block", fontSize: "13px", color: "#B0B0B0", marginBottom: "6px" }}>
+                Student PIN
+              </label>
+              <input
+                type="text"
+                value={pin}
+                onChange={(e) => setPin(e.target.value)}
+                placeholder="482910"
+                maxLength={6}
+                required
+                autoFocus
+                style={{
+                  width: "100%",
+                  padding: "10px 14px",
+                  background: "#0A0A0A",
+                  border: "2px solid #3A3A3A",
+                  borderRadius: "8px",
+                  color: "#F5F5F5",
+                  fontSize: "20px",
+                  fontFamily: "monospace",
+                  letterSpacing: "4px",
+                  textAlign: "center",
+                  outline: "none",
+                  boxSizing: "border-box",
+                }}
+                onFocus={(e) => (e.target.style.borderColor = "#121bde")}
+                onBlur={(e) => (e.target.style.borderColor = "#3A3A3A")}
+              />
+            </div>
+
             {error && (
-              <div className="text-sm text-accent-orange bg-accent-orange/10 px-3 py-2 rounded-card">{error}</div>
+              <div style={{
+                fontSize: "13px",
+                color: "#d72d02",
+                background: "rgba(215, 45, 2, 0.1)",
+                padding: "8px 12px",
+                borderRadius: "8px",
+              }}>
+                {error}
+              </div>
             )}
-            <Button type="submit" className="w-full" disabled={loading}>
-              {loading ? (lang === "af" ? "Koppel..." : "Linking...") : (lang === "af" ? "Koppel Rekening" : "Link Account")}
-            </Button>
+
+            <button
+              type="submit"
+              disabled={loading || pin.length < 4}
+              style={{
+                width: "100%",
+                padding: "12px",
+                background: loading ? "#1A3A6A" : "#121bde",
+                color: "#F5F5F5",
+                border: "none",
+                borderRadius: "8px",
+                fontSize: "15px",
+                fontWeight: 600,
+                cursor: loading ? "wait" : "pointer",
+                opacity: pin.length < 4 ? 0.5 : 1,
+              }}
+            >
+              {loading ? "Linking..." : "Link Account"}
+            </button>
           </form>
         </div>
-        <div className="mt-4 text-center text-xs text-text-muted">
-          {lang === "af"
-            ? "PINs: 482910 (Thabo), 629104 (Maryke se dogter), 847362 (Klara)"
-            : "PINs: 482910 (Thabo), 629104 (Maryke se dogter), 847362 (Klara)"}
+
+        <div style={{ textAlign: "center", marginTop: "16px", fontSize: "12px", color: "#6B6B6B" }}>
+          PINs: 482910 (Thabo), 629104 (Maryke se dogter), 847362 (Klara)
         </div>
       </div>
     </div>
