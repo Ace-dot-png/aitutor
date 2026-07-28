@@ -42,7 +42,7 @@ export default function ParentLinkPage() {
             <Button type="submit" className="w-full" disabled={loading}>{loading?(lang==="af"?"Koppel...":"Linking..."):(lang==="af"?"Koppel Rekening":"Link Account")}</Button>
           </form>
         </div>
-        <div className="mt-4 text-center text-xs text-text-muted">{lang==="af"?"Demo PIN: 371824 (Aisha Patel)":"Demo PIN: 371824 (Aisha Patel)"}</div>
+        <div className="mt-4 text-center text-xs text-text-muted">{lang==="af"?"Demo PINs: 482910 (Thabo), 629104 (Maryke se dogter), 847362 (Klara)":"Demo PINs: 482910 (Thabo), 629104 (Maryke se dogter), 847362 (Klara)"}</div>
       </div>
     </div>
   );
