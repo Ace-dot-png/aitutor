@@ -16,12 +16,13 @@ export const authOptions: NextAuthOptions = {
           "maryke.daughter@aitutor.co.za": { id:"sc1",email:"maryke.daughter@aitutor.co.za",name:"Maryke se dogter",role:"STUDENT",schoolId:"s1",schoolName:"Sandton Academy",grade:"G10",pin:"629104",linkedStudentId:undefined,language:"en" },
           "maryke@aitutor.co.za": { id:"pc1",email:"maryke@aitutor.co.za",name:"Maryke",role:"PARENT",schoolId:undefined,schoolName:undefined,grade:undefined,pin:undefined,linkedStudentId:"sc1",language:"en" },
           "priya@patel.co.za": { id:"p1",email:"priya@patel.co.za",name:"Mrs. Priya Patel",role:"PARENT",schoolId:undefined,schoolName:undefined,grade:undefined,pin:undefined,linkedStudentId:"s1",language:"en" },
+          "newparent@test.co.za": { id:"p99",email:"newparent@test.co.za",name:"Test Parent",role:"PARENT",schoolId:undefined,schoolName:undefined,grade:undefined,pin:undefined,linkedStudentId:undefined,language:"en" },
           "Maryke@testing.com": { id:"nt1",email:"Maryke@testing.com",name:"Maryke",role:"PARENT",schoolId:undefined,schoolName:undefined,grade:undefined,pin:undefined,linkedStudentId:"ns1",language:"en" },
           "Klara@testing.com": { id:"ns1",email:"Klara@testing.com",name:"Klara",role:"STUDENT",schoolId:"s1",schoolName:"Sandton Academy",grade:"G10",pin:"847362",linkedStudentId:undefined,language:"en" },
           "admin@testing.com": { id:"na1",email:"admin@testing.com",name:"Admin",role:"ADMIN",schoolId:"s1",schoolName:"Sandton Academy",grade:undefined,pin:undefined,linkedStudentId:undefined,language:"en" },
         };
         const PWD: Record<string,string> = {
-          "admin@sandtonacademy.co.za":"Admin123!","n.dlamini@sandtonacademy.co.za":"Teacher123!","thabo@student.co.za":"Student123!","maryke.daughter@aitutor.co.za":"Demo2025!","maryke@aitutor.co.za":"Demo2025!","priya@patel.co.za":"Parent123!","Maryke@testing.com":"Demo2026!","Klara@testing.com":"Demo2026!","admin@testing.com":"Demo2026!",
+          "admin@sandtonacademy.co.za":"Admin123!","n.dlamini@sandtonacademy.co.za":"Teacher123!","thabo@student.co.za":"Student123!","maryke.daughter@aitutor.co.za":"Demo2025!","maryke@aitutor.co.za":"Demo2025!","priya@patel.co.za":"Parent123!","newparent@test.co.za":"Parent123!","Maryke@testing.com":"Demo2026!","Klara@testing.com":"Demo2026!","admin@testing.com":"Demo2026!",
         };
         if (!credentials?.email || !credentials?.password) return null;
         if (PWD[credentials.email] === credentials.password && DEMO[credentials.email]) return DEMO[credentials.email];

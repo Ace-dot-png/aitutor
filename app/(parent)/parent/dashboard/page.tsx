@@ -42,7 +42,8 @@ export default function ParentDashboardPage() {
   const { lang } = useLang();
   const [childData, setChildData] = useState<any>(null);
 
-  const linkedId = (session?.user as any)?.linkedStudentId;
+  const linkedId = (session?.user as any)?.linkedStudentId
+    || (typeof window !== "undefined" ? localStorage.getItem("linkedStudentId") : null);
 
   // Redirect if not linked
   useEffect(() => {
