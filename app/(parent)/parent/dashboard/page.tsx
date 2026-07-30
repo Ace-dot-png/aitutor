@@ -272,7 +272,7 @@ export default function ParentDashboardPage() {
             <p className="text-sm text-text-secondary mb-1">
               {showPayment.name} — {t(lang, "grade")} {showPayment.grade?.replace?.("G", "") || ""}
             </p>
-            <div className="text-3xl font-bold text-accent-green my-4">R149<span className="text-sm text-text-muted">/month</span></div>
+            <div className="text-3xl font-bold text-accent-green my-4">R189.99<span className="text-sm text-text-muted">/month</span></div>
             <p className="text-xs text-text-muted mb-4">
               {lang === "af"
                 ? "PayStack-integrasie sal hier laai. Betaalmetodes: kaart, EFT, en meer."
