@@ -72,6 +72,11 @@ export function resetPassword(email: string, newPassword: string): boolean {
 // School management
 const schools: string[] = [
   "Sandton Academy",
+  "Trailblazers Christian Academy",
+  "Thornhill Primary School",
+  "Laerskool Generaal Hendrik Schoeman",
+  "Harties High",
+  "Xanadu Private School",
   "Parktown High School",
   "St Mary's School",
   "Home Schooled",

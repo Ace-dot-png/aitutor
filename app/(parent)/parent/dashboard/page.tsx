@@ -25,7 +25,10 @@ export default function ParentDashboardPage() {
   const [childEmail, setChildEmail] = useState("");
   const [childPassword, setChildPassword] = useState("");
   const [childGrade, setChildGrade] = useState("G10");
-  const [childSchool, setChildSchool] = useState("Sandton Academy");
+  const [childSchool, setChildSchool] = useState("");
+  const [schoolQuery, setSchoolQuery] = useState("");
+  const [schools, setSchools] = useState<string[]>(["Sandton Academy", "Trailblazers Christian Academy", "Thornhill Primary School", "Laerskool Generaal Hendrik Schoeman", "Harties High", "Xanadu Private School", "Parktown High School", "St Mary's School", "Home Schooled"]);
+  const [showSchoolDropdown, setShowSchoolDropdown] = useState(false);
   const [childCurriculum, setChildCurriculum] = useState("CAPS");
   const [childError, setChildError] = useState("");
   const [childLoading, setChildLoading] = useState(false);
@@ -148,7 +151,43 @@ export default function ParentDashboardPage() {
               <select value={childGrade} onChange={e => setChildGrade(e.target.value)} className="input-field w-full">
                 {Array.from({ length: 12 }, (_, i) => <option key={i+1} value={`G${i+1}`}>Grade {i+1}</option>)}
               </select>
-              <input value={childSchool} onChange={e => setChildSchool(e.target.value)} className="input-field w-full" placeholder="School" />
+              <div className="relative">
+                <label className="block text-sm text-text-secondary mb-1">{lang === "af" ? "Skool" : "School"}</label>
+                <input
+                  value={schoolQuery}
+                  onChange={(e) => { setSchoolQuery(e.target.value); setChildSchool(""); setShowSchoolDropdown(true); }}
+                  onFocus={() => setShowSchoolDropdown(true)}
+                  onBlur={() => setTimeout(() => setShowSchoolDropdown(false), 200)}
+                  required
+                  className="input-field w-full"
+                  placeholder={lang === "af" ? "Soek jou skool..." : "Search your school..."}
+                />
+                {showSchoolDropdown && schoolQuery && (
+                  (() => {
+                    const filtered = schools.filter(s => s.toLowerCase().includes(schoolQuery.toLowerCase()));
+                    if (filtered.length === 0) return null;
+                    return (
+                      <div className="absolute z-50 w-full mt-1 bg-bg-secondary border border-border rounded-card max-h-36 overflow-y-auto shadow-lg">
+                        {filtered.map((s: string) => (
+                          <div
+                            key={s}
+                            className={`px-4 py-2 text-sm cursor-pointer hover:bg-bg-primary ${
+                              childSchool === s ? "text-accent-blue font-semibold" : "text-text-primary"
+                            }`}
+                            onMouseDown={() => {
+                              setChildSchool(s);
+                              setSchoolQuery(s);
+                              setShowSchoolDropdown(false);
+                            }}
+                          >
+                            {s}
+                          </div>
+                        ))}
+                      </div>
+                    );
+                  })()
+                )}
+              </div>
               <select value={childCurriculum} onChange={e => setChildCurriculum(e.target.value)} className="input-field w-full">
                 <option value="CAPS">CAPS</option>
                 <option value="IEB">IEB</option>
