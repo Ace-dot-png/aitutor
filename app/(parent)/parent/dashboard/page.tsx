@@ -1,162 +1,259 @@
 "use client"
 export const dynamic = 'force-dynamic'
 import { useSession } from "next-auth/react";
-import { redirect } from "next/navigation";
 import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 import Card from "@/components/ui/Card";
-import ProgressBar from "@/components/ui/ProgressBar";
-import { PieChart, Pie, Cell, ResponsiveContainer } from "recharts";
 import { useLang } from "@/lib/LanguageContext";
 import { t } from "@/lib/i18n";
 
-// Demo data mapping for when DB is offline
-const DEMO_KIDS: Record<string, any> = {
-  "s1": { name: "Thabo Nkosi", grade: "G10", school: "Sandton Academy",
-    subjects: { MATHEMATICS: 72, PHYSICS: 45, ENGLISH: 81 },
-    sessions: [["Trigonometry","Maths","Jun 23"],["Energy","Physics","Jun 22"],["Essay Writing","English","Jun 20"],["Algebra","Maths","Jun 18"],["Functions","Maths","Jun 15"]],
-    painPoints: ["Simultaneous equations","Laws of exponents"],
-    breakthroughs: ["Trigonometric ratios","Linear functions"],
-    sentiment: { positive: 4, neutral: 2, struggling: 1, disengaged: 1 },
-    note: "Thabo is making steady progress. He's confident in Maths but needs to work on Physics problem-solving. Encourage him to do past papers."
-  },
-  "sc1": { name: "Maryke se dogter", grade: "G10", school: "Sandton Academy",
-    subjects: { MATHEMATICS: 58, PHYSICS: 61, ENGLISH: 73, AFRIKAANS: 85 },
-    sessions: [["Poetry Analysis","English","Jul 2"],["Quadratic Equations","Maths","Jul 1"],["Elektrisiteit","Physics","Jun 29"],["Letterkunde","Afrikaans","Jun 28"]],
-    painPoints: ["Factorisation","Quadratic equations"],
-    breakthroughs: ["Poetry analysis","Ohm's law"],
-    sentiment: { positive: 3, neutral: 3, struggling: 2, disengaged: 0 },
-    note: "Your child is doing well in languages and improving in Maths. Extra focus on algebraic manipulation at home will help a lot. She's engaged and asks good questions during sessions."
-  },
-  "ns1": { name: "Klara", grade: "G10", school: "Sandton Academy",
-    subjects: { MATHEMATICS: 65, PHYSICS: 52, ENGLISH: 78, BIOLOGY: 70 },
-    sessions: [["Cell Biology","Biology","Jul 3"],["Graphs","Maths","Jul 1"],["Forces","Physics","Jun 28"],["Comprehension","English","Jun 26"]],
-    painPoints: ["Newton's laws","Graphing functions"],
-    breakthroughs: ["Cell structure","Essay structure"],
-    sentiment: { positive: 3, neutral: 2, struggling: 3, disengaged: 0 },
-    note: "Klara is progressing well across all subjects. Physics concepts need reinforcement — try using real-world examples at home. She's doing excellent work in English and Biology."
-  },
-};
-
 export default function ParentDashboardPage() {
-  const { data: session, status } = useSession();
+  const { data: session } = useSession();
+  const router = useRouter();
   const { lang } = useLang();
-  const [childData, setChildData] = useState<any>(null);
+  const user = session?.user as any;
 
-  const linkedId = (session?.user as any)?.linkedStudentId
-    || (typeof window !== "undefined" ? localStorage.getItem("linkedStudentId") : null);
+  const [children, setChildren] = useState<any[]>([]);
+  const [showAddChild, setShowAddChild] = useState(false);
+  const [showPayment, setShowPayment] = useState<any>(null); // child being paid for
+  const [paymentStep, setPaymentStep] = useState<"eula" | "pay">("eula");
+  const [acceptedPOPIA, setAcceptedPOPIA] = useState(false);
+  const [acceptedEULA, setAcceptedEULA] = useState(false);
 
-  // Redirect if not linked
-  useEffect(() => {
-    if (status === "authenticated" && !linkedId) {
-      redirect("/parent/link");
-    }
-  }, [status, linkedId]);
+  // Add child form
+  const [childName, setChildName] = useState("");
+  const [childEmail, setChildEmail] = useState("");
+  const [childPassword, setChildPassword] = useState("");
+  const [childGrade, setChildGrade] = useState("G10");
+  const [childSchool, setChildSchool] = useState("Sandton Academy");
+  const [childCurriculum, setChildCurriculum] = useState("CAPS");
+  const [childError, setChildError] = useState("");
+  const [childLoading, setChildLoading] = useState(false);
 
-  // Load child data
-  useEffect(() => {
-    if (!linkedId) return;
-    // Try API first, fall back to demo data
-    fetch("/api/stats/parent")
-      .then(r => r.json())
-      .then(data => {
-        if (!data.error) {
-          setChildData({
-            name: data.childName,
-            grade: data.childGrade,
-            school: data.schoolName || "Sandton Academy",
-            subjects: (data.stats || []).reduce((acc: any, s: any) => {
-              acc[s.subject] = s.masteryScore;
-              return acc;
-            }, {}),
-            sessions: (data.recentSessions || []).slice(0, 5).map((s: any) => [s.topic, s.subject, s.startedAt?.slice(0,10) || ""]),
-            painPoints: [],
-            breakthroughs: [],
-            sentiment: { positive: 2, neutral: 2, struggling: 1, disengaged: 0 },
-            note: data.parentNote || "",
-          });
-        } else {
-          setChildData(DEMO_KIDS[linkedId] || null);
-        }
-      })
-      .catch(() => {
-        setChildData(DEMO_KIDS[linkedId] || null);
+  const fetchChildren = async () => {
+    try {
+      const res = await fetch("/api/parent/children");
+      const data = await res.json();
+      setChildren(data.children || []);
+    } catch {}
+  };
+
+  useEffect(() => { fetchChildren(); }, []);
+
+  const handleAddChild = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setChildLoading(true);
+    setChildError("");
+    try {
+      const res = await fetch("/api/parent/children", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ name: childName, email: childEmail, password: childPassword, grade: childGrade, school: childSchool, curriculum: childCurriculum }),
       });
-  }, [linkedId]);
+      const data = await res.json();
+      if (res.ok) {
+        setShowAddChild(false);
+        setChildName(""); setChildEmail(""); setChildPassword("");
+        fetchChildren();
+        // New child created — go to payment flow
+        setShowPayment({ name: childName, pin: data.pin, email: childEmail });
+        setPaymentStep("eula");
+        setAcceptedPOPIA(false);
+        setAcceptedEULA(false);
+      } else {
+        setChildError(data.error || "Failed");
+      }
+    } catch {
+      setChildError("Something went wrong");
+    } finally {
+      setChildLoading(false);
+    }
+  };
 
-  if (status === "loading" || !childData) {
-    return <div className="min-h-screen bg-bg-primary flex items-center justify-center"><div className="text-text-muted">Loading...</div></div>;
-  }
+  const startPaymentFor = (child: any) => {
+    setShowPayment(child);
+    setPaymentStep("eula");
+    setAcceptedPOPIA(false);
+    setAcceptedEULA(false);
+  };
 
-  const child = childData;
-  const subjKeys = Object.keys(child.subjects || { MATHEMATICS: 0, PHYSICS: 0, ENGLISH: 0 });
-  const subjects = subjKeys.map((k: string) => ({
-    subj: k, val: child.subjects[k] || 0,
-    color: k === "MATHEMATICS" ? "#121bde" : k === "PHYSICS" ? "#1cdb19" : k === "ENGLISH" ? "#d72d02" : k === "AFRIKAANS" ? "#9b59b6" : k === "BIOLOGY" ? "#e67e22" : "#121bde",
-  }));
-
-  const sentimentData = [
-    { name: t(lang,"positive").toLowerCase(), value: child.sentiment?.positive || 2, color: "#1cdb19" },
-    { name: t(lang,"neutral").toLowerCase(), value: child.sentiment?.neutral || 2, color: "#B0B0B0" },
-    { name: t(lang,"struggling_sentiment").toLowerCase(), value: child.sentiment?.struggling || 1, color: "#d72d02" },
-    { name: t(lang,"disengaged").toLowerCase(), value: child.sentiment?.disengaged || 0, color: "#6B6B6B" },
-  ];
+  const proceedToPayStack = () => {
+    // In production: redirect to PayStack checkout
+    // For now: mark as paid and redirect
+    setPaymentStep("pay");
+  };
 
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-2xl font-semibold">{child.name}</h1>
-        <p className="text-text-muted text-sm">{t(lang,"grade")} {child.grade?.replace("G","")} · {t(lang,"school")}: {child.school}</p>
+        <h1 className="text-2xl font-semibold">{user?.name}</h1>
+        <p className="text-text-muted text-sm">{lang === "af" ? "Ouer Portaal" : "Parent Portal"}</p>
       </div>
 
-      <div className="grid grid-cols-3 gap-4">
-        {subjects.map((s: any) => (
-          <Card key={s.subj}>
-            <div className="text-sm text-text-secondary mb-1">{s.subj}</div>
-            <div className="text-2xl font-semibold" style={{ color: s.val >= 70 ? "#1cdb19" : s.val >= 40 ? "#d72d02" : "#6B6B6B" }}>{s.val}%</div>
-            <ProgressBar value={s.val} color={s.color} className="mt-2" />
-          </Card>
-        ))}
-      </div>
+      {/* Children list */}
+      <Card className="p-5">
+        <div className="flex items-center justify-between mb-4">
+          <h2 className="text-sm font-semibold text-text-secondary uppercase tracking-wider">
+            {lang === "af" ? "My Kinders" : "My Children"} ({children.length})
+          </h2>
+          <button onClick={() => { setShowAddChild(true); setChildError(""); }} className="btn-primary text-xs px-3 py-1.5">
+            + {lang === "af" ? "Voeg Kind By" : "Add Child"}
+          </button>
+        </div>
 
-      <div className="grid grid-cols-2 gap-6">
-        <Card className="p-5">
-          <h2 className="text-sm font-semibold text-text-secondary uppercase tracking-wider mb-4">{t(lang,"recentSessions")}</h2>
-          {(child.sessions || []).map((s: any, i: number) => (
-            <div key={i} className="flex justify-between py-2 border-b border-border last:border-0">
-              <div><div className="text-sm text-text-primary">{s[0]}</div><div className="text-xs text-text-muted">{s[1]} · {s[2]}</div></div>
-              <div className="text-sm text-accent-green">+{20 + i * 5}</div>
+        {children.length === 0 ? (
+          <div className="text-center py-8 text-text-muted text-sm">
+            <p className="mb-2">{lang === "af" ? "Nog geen kinders bygevoeg nie." : "No children added yet."}</p>
+            <p>{lang === "af" ? "Voeg jou eerste kind by om te begin." : "Add your first child to get started."}</p>
+          </div>
+        ) : (
+          <div className="space-y-3">
+            {children.map((child: any, i: number) => (
+              <div key={i} className="flex items-center justify-between p-3 bg-bg-secondary rounded-card">
+                <div>
+                  <div className="text-sm font-medium">{child.name}</div>
+                  <div className="text-xs text-text-muted">
+                    {t(lang, "grade")} {child.grade?.replace("G", "")} · {child.schoolName} · PIN: {child.pin}
+                  </div>
+                </div>
+                <div className="flex gap-2">
+                  <button
+                    onClick={() => router.push(`/parent/dashboard?child=${child.email}`)}
+                    className="btn-secondary text-xs px-3 py-1"
+                  >
+                    View
+                  </button>
+                  <button
+                    onClick={() => startPaymentFor(child)}
+                    className="btn-primary text-xs px-3 py-1"
+                  >
+                    {lang === "af" ? "Betaal" : "Pay"}
+                  </button>
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
+      </Card>
+
+      {/* Add Child Modal */}
+      {showAddChild && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+          <div className="card p-6 w-full max-w-md mx-4 max-h-[90vh] overflow-y-auto">
+            <h2 className="text-lg font-semibold mb-4">{lang === "af" ? "Voeg Kind By" : "Add a Child"}</h2>
+            <form onSubmit={handleAddChild} className="space-y-3">
+              <input value={childName} onChange={e => setChildName(e.target.value)} required className="input-field w-full" placeholder={lang === "af" ? "Kind se naam" : "Child's name"} />
+              <input value={childEmail} onChange={e => setChildEmail(e.target.value)} required type="email" className="input-field w-full" placeholder={lang === "af" ? "Kind se e-pos" : "Child's email"} />
+              <input value={childPassword} onChange={e => setChildPassword(e.target.value)} required minLength={6} type="password" className="input-field w-full" placeholder={lang === "af" ? "Wagwoord vir kind (min 6)" : "Password for child (min 6)"} />
+              <select value={childGrade} onChange={e => setChildGrade(e.target.value)} className="input-field w-full">
+                {Array.from({ length: 12 }, (_, i) => <option key={i+1} value={`G${i+1}`}>Grade {i+1}</option>)}
+              </select>
+              <input value={childSchool} onChange={e => setChildSchool(e.target.value)} className="input-field w-full" placeholder="School" />
+              <select value={childCurriculum} onChange={e => setChildCurriculum(e.target.value)} className="input-field w-full">
+                <option value="CAPS">CAPS</option>
+                <option value="IEB">IEB</option>
+                <option value="CAMBRIDGE">Cambridge</option>
+              </select>
+
+              <p className="text-xs text-text-muted">
+                {lang === "af"
+                  ? "Nadat jy jou kind bygevoeg het, sal jy die EULA en POPIA moet aanvaar en dan na PayStack geneem word vir betaling."
+                  : "After adding your child, you will need to accept our EULA and POPIA policies, then proceed to PayStack for payment."}
+              </p>
+
+              {childError && <div className="text-sm text-accent-orange">{childError}</div>}
+
+              <div className="flex gap-2 pt-2">
+                <button type="submit" disabled={childLoading} className="btn-primary flex-1 text-sm">
+                  {lang === "af" ? "Voeg Kind By" : "Add Child"}
+                </button>
+                <button type="button" onClick={() => setShowAddChild(false)} className="btn-secondary flex-1 text-sm">
+                  {lang === "af" ? "Kanselleer" : "Cancel"}
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+
+      {/* Payment Modal: Step 1 — EULA/POPIA */}
+      {showPayment && paymentStep === "eula" && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+          <div className="card p-6 w-full max-w-md mx-4 max-h-[90vh] overflow-y-auto">
+            <h2 className="text-lg font-semibold mb-2">
+              {lang === "af" ? "Aanvaar Bepalings vir" : "Accept Terms for"} {showPayment.name}
+            </h2>
+            <p className="text-xs text-text-muted mb-4">
+              {lang === "af"
+                ? "Jy moet die EULA en POPIA aanvaar voordat jy kan betaal."
+                : "You must accept the EULA and POPIA before proceeding to payment."}
+            </p>
+
+            <div className="space-y-3">
+              <div className="border border-border rounded-card p-3">
+                <label className="flex items-start gap-2 cursor-pointer">
+                  <input type="checkbox" checked={acceptedEULA} onChange={e => setAcceptedEULA(e.target.checked)} className="mt-1" />
+                  <span className="text-xs text-text-secondary">
+                    I accept the <strong>End User License Agreement (EULA)</strong> for my child's use of aiTutor.
+                  </span>
+                </label>
+              </div>
+
+              <div className="border border-border rounded-card p-3">
+                <label className="flex items-start gap-2 cursor-pointer">
+                  <input type="checkbox" checked={acceptedPOPIA} onChange={e => setAcceptedPOPIA(e.target.checked)} className="mt-1" />
+                  <span className="text-xs text-text-secondary">
+                    I consent to aiTutor processing my child's personal information in accordance with <strong>POPIA (Act 4 of 2013)</strong>.
+                  </span>
+                </label>
+              </div>
+
+              <button
+                onClick={proceedToPayStack}
+                disabled={!acceptedEULA || !acceptedPOPIA}
+                className="btn-primary w-full text-sm py-3"
+              >
+                {lang === "af" ? "Gaan na PayStack" : "Proceed to PayStack"}
+              </button>
+              <button onClick={() => setShowPayment(null)} className="btn-secondary w-full text-sm py-2">
+                {lang === "af" ? "Later" : "Later"}
+              </button>
             </div>
-          ))}
-        </Card>
-        <Card className="p-5">
-          <h2 className="text-sm font-semibold text-text-secondary uppercase tracking-wider mb-4">{t(lang,"sentiment")}</h2>
-          <ResponsiveContainer width="100%" height={200}><PieChart><Pie data={sentimentData} dataKey="value" nameKey="name" cx="50%" cy="50%" innerRadius={50} outerRadius={80}>{sentimentData.map((e,i)=><Cell key={i} fill={e.color}/>)}</Pie></PieChart></ResponsiveContainer>
-          <div className="flex justify-center gap-4 mt-2">{sentimentData.map((d)=><div key={d.name} className="flex items-center gap-1 text-xs"><div className="w-2 h-2 rounded-full" style={{backgroundColor:d.color}}/><span className="text-text-muted">{d.name}</span></div>)}</div>
-        </Card>
-      </div>
+          </div>
+        </div>
+      )}
 
-      <div className="grid grid-cols-2 gap-6">
-        <Card className="p-5">
-          <h2 className="text-sm font-semibold text-text-secondary uppercase tracking-wider mb-4">{t(lang,"painPoints")}</h2>
-          {(child.painPoints || []).length > 0
-            ? child.painPoints.map((p: string, i: number) => <div key={i} className="text-sm text-accent-orange bg-accent-orange/10 px-3 py-1.5 rounded-card mb-1">{p}</div>)
-            : <div className="text-sm text-text-muted">{lang === "af" ? "Geen pynpunte nie" : "No pain points"}</div>
-          }
-        </Card>
-        <Card className="p-5">
-          <h2 className="text-sm font-semibold text-text-secondary uppercase tracking-wider mb-4">{t(lang,"breakthroughs")}</h2>
-          {(child.breakthroughs || []).length > 0
-            ? child.breakthroughs.map((b: string, i: number) => <div key={i} className="text-sm text-accent-green bg-accent-green/10 px-3 py-1.5 rounded-card mb-1">{b}</div>)
-            : <div className="text-sm text-text-muted">{lang === "af" ? "Nog geen deurbrake nie" : "No breakthroughs yet"}</div>
-          }
-        </Card>
-      </div>
-
-      {child.note && (
-        <Card className="p-5">
-          <h2 className="text-sm font-semibold text-text-secondary uppercase tracking-wider mb-2">{t(lang,"aiSummary")||"AI Summary"}</h2>
-          <p className="text-sm text-text-primary leading-relaxed">{child.note}</p>
-        </Card>
+      {/* Payment Modal: Step 2 — PayStack */}
+      {showPayment && paymentStep === "pay" && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+          <div className="card p-6 w-full max-w-md mx-4 text-center">
+            <h2 className="text-lg font-semibold mb-2">
+              {lang === "af" ? "PayStack Betaling" : "PayStack Payment"}
+            </h2>
+            <p className="text-sm text-text-secondary mb-1">
+              {showPayment.name} — {t(lang, "grade")} {showPayment.grade?.replace?.("G", "") || ""}
+            </p>
+            <div className="text-3xl font-bold text-accent-green my-4">R149<span className="text-sm text-text-muted">/month</span></div>
+            <p className="text-xs text-text-muted mb-4">
+              {lang === "af"
+                ? "PayStack-integrasie sal hier laai. Betaalmetodes: kaart, EFT, en meer."
+                : "PayStack integration will load here. Payment methods: card, EFT, and more."}
+            </p>
+            <div className="bg-bg-secondary p-4 rounded-card mb-4 text-xs text-text-muted">
+              {lang === "af"
+                ? "PayStack sal hier in 'n regte produksie wees. Die integrasie gebruik PayStack se Inline JS of Redirect API."
+                : "PayStack will go here in production. The integration uses PayStack's Inline JS or Redirect API."}
+            </div>
+            <div className="flex gap-2">
+              <button onClick={() => { setShowPayment(null); fetchChildren(); }} className="btn-primary flex-1 text-sm">
+                {lang === "af" ? "Voltooi" : "Done"}
+              </button>
+              <button onClick={() => setShowPayment(null)} className="btn-secondary flex-1 text-sm">
+                {lang === "af" ? "Sluit" : "Close"}
+              </button>
+            </div>
+          </div>
+        </div>
       )}
     </div>
   );

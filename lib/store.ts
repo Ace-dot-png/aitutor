@@ -14,6 +14,7 @@ export interface StoredUser {
   curriculum?: string;
   linkedStudentId?: string;
   language?: string;
+  parentEmail?: string;
 }
 
 const users: Record<string, StoredUser> = {
