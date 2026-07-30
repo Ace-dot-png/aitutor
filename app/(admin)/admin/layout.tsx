@@ -16,6 +16,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
   const items = [
     { label: t(lang, "dashboard"), href: "/admin/dashboard", icon: "▦" },
     { label: lang === "af" ? "Gebruikers" : "Users", href: "/admin/users", icon: "👥" },
+    { label: lang === "af" ? "Skole" : "Schools", href: "/admin/schools", icon: "🏫" },
   ];
 
   return (
