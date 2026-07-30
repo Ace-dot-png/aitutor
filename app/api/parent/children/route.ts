@@ -5,7 +5,7 @@ import { addUser, getAllUsers, StoredUser } from "@/lib/store";
 
 export async function GET() {
   const session = await getServerSession(authOptions);
-  if ((session?.user as any)?.role !== "PARENT") {
+  if (!session?.user || (session.user as any)?.role !== "PARENT") {
     return Response.json({ error: "Forbidden" }, { status: 403 });
   }
   const parentEmail = (session.user as any).email;
@@ -17,7 +17,7 @@ export async function GET() {
 
 export async function POST(req: NextRequest) {
   const session = await getServerSession(authOptions);
-  if ((session?.user as any)?.role !== "PARENT") {
+  if (!session?.user || (session.user as any)?.role !== "PARENT") {
     return Response.json({ error: "Forbidden" }, { status: 403 });
   }
 
